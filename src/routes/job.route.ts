@@ -21,6 +21,19 @@ jobRouter.post("", async function(req, res) {
     }
 });
 
+jobRouter.get("", async function(req, res){
+    const jobController = await JobController.getInstance();
+    const jobs = await jobController.getAll();
+
+    if (jobs != null) {
+        console.log(jobs);
+        res.status(200);
+        res.json(jobs);
+    } else {
+        res.status(204).end();
+    }
+});
+
 export {
     jobRouter
 };

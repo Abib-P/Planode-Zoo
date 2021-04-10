@@ -25,6 +25,17 @@ export class JobController {
         return this.Job.create(props);
     }
 
+    public async getOne(id: number): Promise<JobInstance | null> {
+        return this.Job.findOne({
+            where: {
+                id
+            }
+        });
+    }
+
+    public async getAll(): Promise<JobInstance[] | null> {
+        return this.Job.findAll();
+    }
 
 
 
