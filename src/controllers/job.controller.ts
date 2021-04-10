@@ -1,5 +1,5 @@
 import {ModelCtor} from "sequelize";
-import {JobCreationProps, JobInstance} from "../models/job.model";
+import {JobCreationProps, JobInstance, JobProps} from "../models/job.model";
 import {SequelizeManager} from "../models";
 
 
@@ -35,6 +35,18 @@ export class JobController {
 
     public async getAll(): Promise<JobInstance[] | null> {
         return this.Job.findAll();
+    }
+
+    public async update(props: JobProps): Promise<JobInstance | null> {
+        const job = await JobController.instance.getOne(props.id);
+        if (job != null){
+            return job.update(
+                {
+                    name: props.name
+                }
+            );
+        }
+        return null;
     }
 
 
