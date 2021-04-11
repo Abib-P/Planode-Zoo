@@ -63,6 +63,4 @@ export class JobController {
         return 0;
     }
 
-
-
 }

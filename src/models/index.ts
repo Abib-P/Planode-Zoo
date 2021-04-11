@@ -2,10 +2,14 @@ import {ModelCtor, Sequelize} from "sequelize";
 import {Dialect} from "sequelize/types/lib/sequelize";
 
 import jobCreator, {JobInstance} from "./job.model";
+import clientCreator, {ClientInstance} from "./client.model";
+import sessionCreator, {SessionInstance} from "./session.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
     Job: ModelCtor<JobInstance>;
+    Client: ModelCtor<ClientInstance>;
+    Session: ModelCtor<SessionInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -14,6 +18,8 @@ export class SequelizeManager implements SequelizeManagerProps {
 
     sequelize: Sequelize;
     Job: ModelCtor<JobInstance>;
+    Client: ModelCtor<ClientInstance>;
+    Session: ModelCtor<SessionInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -35,6 +41,8 @@ export class SequelizeManager implements SequelizeManagerProps {
         const managerProps: SequelizeManagerProps = {
             sequelize,
             Job: jobCreator(sequelize),
+            Client: clientCreator(sequelize),
+            Session: sessionCreator(sequelize)
         }
         await sequelize.sync();
         return new SequelizeManager(managerProps);
@@ -43,7 +51,8 @@ export class SequelizeManager implements SequelizeManagerProps {
     private constructor(props: SequelizeManagerProps) {
         this.sequelize = props.sequelize;
         this.Job = props.Job;
-
+        this.Client = props.Client;
+        this.Session = props.Session;
     }
 
 }
