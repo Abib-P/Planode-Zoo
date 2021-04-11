@@ -49,6 +49,20 @@ export class JobController {
         return null;
     }
 
+    public async delete(id: number): Promise<number> {
+        const job = await JobController.instance.getOne(id);
+        if (job != null){
+            return this.Job.destroy(
+                {
+                    where: {
+                        id: job.id
+                    }
+                }
+            );
+        }
+        return 0;
+    }
+
 
 
 }

@@ -69,7 +69,19 @@ jobRouter.put("/", async function (req, res){
     } else {
         res.status(400).end();
     }
-})
+});
+
+jobRouter.delete("/:id", async function (req, res){
+    const {id} = req.params;
+    const jobController = await JobController.getInstance();
+    const affectedRows = await jobController.delete(Number.parseInt(id));
+
+    if (affectedRows > 0){
+        res.status(200).end();
+    } else {
+        res.status(400).end();
+    }
+});
 
 export {
     jobRouter
