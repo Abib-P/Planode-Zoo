@@ -1,5 +1,6 @@
 import express from "express";
 import {AuthClientController} from "../controllers/authClient.controller";
+import {authClientMiddleware} from "../middleware/auth.middleware";
 
 const authClientRouter = express.Router();
 
@@ -47,6 +48,22 @@ authClientRouter.post("/login", async function(req, res) {
             token: session.token
         });
     }
+});
+
+authClientRouter.delete("/logout", authClientMiddleware, async function(req, res){
+    const auth = req.headers["authorization"];
+    if (auth !== undefined){
+        const token = auth.slice(7);
+        const authClientController = await AuthClientController.getInstance();
+        const affectedRows = await authClientController.logout(token);
+        console.log("affectedRows" + affectedRows);
+        if (affectedRows > 0){
+            res.status(200).end();
+        } else {
+            res.status(401).end();
+        }
+    }
+    res.status(400).end();
 });
 
 export {

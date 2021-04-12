@@ -44,8 +44,18 @@ export class SequelizeManager implements SequelizeManagerProps {
             Client: clientCreator(sequelize),
             Session: sessionCreator(sequelize)
         }
+        SequelizeManager.associate(managerProps);
         await sequelize.sync();
         return new SequelizeManager(managerProps);
+    }
+
+    private static associate(props: SequelizeManagerProps): void {
+        props.Client.hasMany(props.Session, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // User N Session
+        props.Session.belongsTo(props.Client); // Session 1 User
     }
 
     private constructor(props: SequelizeManagerProps) {

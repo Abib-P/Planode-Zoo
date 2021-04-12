@@ -62,4 +62,14 @@ export class AuthClientController {
         });
     }
 
+    public async logout(token: string): Promise<number> {
+        return this.Session.destroy(
+            {
+                where: {
+                    token: token
+                }
+            }
+        );
+    }
+
 }
