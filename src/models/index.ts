@@ -5,7 +5,8 @@ import jobCreator, {JobInstance} from "./job.model";
 import clientCreator, {ClientInstance} from "./client.model";
 import sessionCreator, {SessionInstance} from "./session.model";
 import employeeCreator, {EmployeeInstance} from "./employee.model";
-import absenceCreator, {AbsenceInstance} from "./Absence.model";
+import absenceCreator, {AbsenceInstance} from "./absence.model";
+import spaceTypeCreator, {SpaceTypeInstance} from "./espaceType.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -14,6 +15,7 @@ export interface SequelizeManagerProps {
     Session: ModelCtor<SessionInstance>;
     Employee:  ModelCtor<EmployeeInstance>;
     Absence: ModelCtor<AbsenceInstance>;
+    SpaceType:  ModelCtor<SpaceTypeInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -26,6 +28,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Session: ModelCtor<SessionInstance>;
     Employee:  ModelCtor<EmployeeInstance>;
     Absence: ModelCtor<AbsenceInstance>;
+    SpaceType:  ModelCtor<SpaceTypeInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -50,7 +53,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             Client: clientCreator(sequelize),
             Session: sessionCreator(sequelize),
             Employee: employeeCreator(sequelize),
-            Absence: absenceCreator(sequelize)
+            Absence: absenceCreator(sequelize),
+            SpaceType: spaceTypeCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -82,6 +86,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Session = props.Session;
         this.Employee = props.Employee;
         this.Absence = props.Absence;
+        this.SpaceType = props.SpaceType;
     }
 
 }
