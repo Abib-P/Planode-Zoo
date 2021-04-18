@@ -16,6 +16,7 @@ import mediaTypeCreator, {MediaTypeInstance} from "./mediaType.model";
 import mediaCreator, {MediaInstance} from "./media.model";
 import statCreator, {StatInstance} from "./Stat";
 import escapeGameCreator, {EscapeGameInstance} from "./escapeGame.model";
+import passCreator, {PassInstance} from "./pass.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -34,6 +35,7 @@ export interface SequelizeManagerProps {
     Media: ModelCtor<MediaInstance>;
     Stat: ModelCtor<StatInstance>;
     EscapeGame: ModelCtor<EscapeGameInstance>;
+    Pass:  ModelCtor<PassInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -56,6 +58,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Media: ModelCtor<MediaInstance>;
     Stat: ModelCtor<StatInstance>;
     EscapeGame: ModelCtor<EscapeGameInstance>;
+    Pass:  ModelCtor<PassInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -90,7 +93,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             MediaType: mediaTypeCreator(sequelize),
             Media: mediaCreator(sequelize),
             Stat: statCreator(sequelize),
-            EscapeGame: escapeGameCreator(sequelize)
+            EscapeGame: escapeGameCreator(sequelize),
+            Pass: passCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -161,6 +165,13 @@ export class SequelizeManager implements SequelizeManagerProps {
         });// MediaType N Media
         props.Media.belongsTo(props.MediaType); // Media 1 MediaType
 
+        props.EscapeGame.hasMany(props.Pass, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// EscapeGame N Pass
+        props.Pass.belongsTo(props.EscapeGame); // Pass 1 EscapeGame TODO -> Pass 1 or 0 EscapeGame
+
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -180,6 +191,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Media = props.Media;
         this.Stat = props.Stat;
         this.EscapeGame = props.EscapeGame;
+        this.Pass = props.Pass;
     }
 
 }
