@@ -15,6 +15,7 @@ import treatmentCreator, {TreatmentInstance} from "./treatment.model";
 import mediaTypeCreator, {MediaTypeInstance} from "./mediaType.model";
 import mediaCreator, {MediaInstance} from "./media.model";
 import statCreator, {StatInstance} from "./Stat";
+import escapeGameCreator, {EscapeGameInstance} from "./escapeGame.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -32,6 +33,7 @@ export interface SequelizeManagerProps {
     MediaType: ModelCtor<MediaTypeInstance>;
     Media: ModelCtor<MediaInstance>;
     Stat: ModelCtor<StatInstance>;
+    EscapeGame: ModelCtor<EscapeGameInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -53,6 +55,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     MediaType: ModelCtor<MediaTypeInstance>;
     Media: ModelCtor<MediaInstance>;
     Stat: ModelCtor<StatInstance>;
+    EscapeGame: ModelCtor<EscapeGameInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -86,7 +89,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             Treatment: treatmentCreator(sequelize),
             MediaType: mediaTypeCreator(sequelize),
             Media: mediaCreator(sequelize),
-            Stat: statCreator(sequelize)
+            Stat: statCreator(sequelize),
+            EscapeGame: escapeGameCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -175,6 +179,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.MediaType = props.MediaType;
         this.Media = props.Media;
         this.Stat = props.Stat;
+        this.EscapeGame = props.EscapeGame;
     }
 
 }
