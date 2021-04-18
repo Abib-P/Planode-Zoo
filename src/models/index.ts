@@ -10,6 +10,7 @@ import spaceTypeCreator, {SpaceTypeInstance} from "./spaceType.model";
 import spaceCreator, {SpaceInstance} from "./space.model";
 import speciesCreator, {SpeciesInstance} from "./species.model";
 import animalCreator, {AnimalInstance} from "./animal.model";
+import maintenanceCreator, {MaintenanceInstance} from "./maintenance.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -22,6 +23,7 @@ export interface SequelizeManagerProps {
     Space: ModelCtor<SpaceInstance>;
     Species: ModelCtor<SpeciesInstance>;
     Animal: ModelCtor<AnimalInstance>;
+    Maintenance: ModelCtor<MaintenanceInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -38,6 +40,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Space: ModelCtor<SpaceInstance>;
     Species: ModelCtor<SpeciesInstance>;
     Animal: ModelCtor<AnimalInstance>;
+    Maintenance: ModelCtor<MaintenanceInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -66,7 +69,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             SpaceType: spaceTypeCreator(sequelize),
             Space: spaceCreator(sequelize),
             Species: speciesCreator(sequelize),
-            Animal: animalCreator(sequelize)
+            Animal: animalCreator(sequelize),
+            Maintenance: maintenanceCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -116,6 +120,13 @@ export class SequelizeManager implements SequelizeManagerProps {
         });// Space N Animal
         props.Animal.belongsTo(props.Space); // Animal 1 Space
 
+        props.Space.hasMany(props.Maintenance, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Space N Maintenance
+        props.Maintenance.belongsTo(props.Space); // Maintenance 1 Space
+
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -129,6 +140,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Space = props.Space;
         this.Species = props.Species;
         this.Animal = props.Animal;
+        this.Maintenance = props.Maintenance;
     }
 
 }
