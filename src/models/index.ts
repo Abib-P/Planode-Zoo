@@ -13,6 +13,7 @@ import animalCreator, {AnimalInstance} from "./animal.model";
 import maintenanceCreator, {MaintenanceInstance} from "./maintenance.model";
 import treatmentCreator, {TreatmentInstance} from "./treatment.model";
 import mediaTypeCreator, {MediaTypeInstance} from "./mediaType.model";
+import mediaCreator, {MediaInstance} from "./media.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -28,6 +29,7 @@ export interface SequelizeManagerProps {
     Maintenance: ModelCtor<MaintenanceInstance>;
     Treatment: ModelCtor<TreatmentInstance>;
     MediaType: ModelCtor<MediaTypeInstance>;
+    Media: ModelCtor<MediaInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -47,6 +49,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Maintenance: ModelCtor<MaintenanceInstance>;
     Treatment: ModelCtor<TreatmentInstance>;
     MediaType: ModelCtor<MediaTypeInstance>;
+    Media: ModelCtor<MediaInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -78,7 +81,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             Animal: animalCreator(sequelize),
             Maintenance: maintenanceCreator(sequelize),
             Treatment: treatmentCreator(sequelize),
-            MediaType: mediaTypeCreator(sequelize)
+            MediaType: mediaTypeCreator(sequelize),
+            Media: mediaCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -142,6 +146,13 @@ export class SequelizeManager implements SequelizeManagerProps {
         });// Animal N Treatment
         props.Treatment.belongsTo(props.Animal); // Treatment 1 Animal
 
+        props.MediaType.hasMany(props.Media, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// MediaType N Media
+        props.Media.belongsTo(props.MediaType); // Media 1 MediaType
+
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -158,6 +169,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Maintenance = props.Maintenance;
         this.Treatment = props.Treatment;
         this.MediaType = props.MediaType;
+        this.Media = props.Media;
     }
 
 }
