@@ -1,0 +1,36 @@
+import {
+    Optional,
+    Model,
+    ModelCtor,
+    DataTypes,
+    Sequelize,
+} from "sequelize";
+
+export interface MediaTypeProps {
+    id: number;
+    name: string;
+}
+
+export interface MediaTypeCreationProps extends Optional<MediaTypeProps, "id"> {}
+
+export interface MediaTypeInstance extends Model<MediaTypeProps, MediaTypeCreationProps>, MediaTypeProps {
+
+}
+
+export default function(sequelize: Sequelize): ModelCtor<MediaTypeInstance> {
+    return sequelize.define<MediaTypeInstance>("media type", {
+        id: {
+            type: DataTypes.BIGINT,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        name: {
+            type: DataTypes.STRING
+        }
+    }, {
+        freezeTableName: true,
+        underscored: true,
+        paranoid: true,
+        timestamps: true
+    });
+}

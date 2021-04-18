@@ -12,6 +12,7 @@ import speciesCreator, {SpeciesInstance} from "./species.model";
 import animalCreator, {AnimalInstance} from "./animal.model";
 import maintenanceCreator, {MaintenanceInstance} from "./maintenance.model";
 import treatmentCreator, {TreatmentInstance} from "./treatment.model";
+import mediaTypeCreator, {MediaTypeInstance} from "./mediaType.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -26,6 +27,7 @@ export interface SequelizeManagerProps {
     Animal: ModelCtor<AnimalInstance>;
     Maintenance: ModelCtor<MaintenanceInstance>;
     Treatment: ModelCtor<TreatmentInstance>;
+    MediaType: ModelCtor<MediaTypeInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -44,6 +46,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Animal: ModelCtor<AnimalInstance>;
     Maintenance: ModelCtor<MaintenanceInstance>;
     Treatment: ModelCtor<TreatmentInstance>;
+    MediaType: ModelCtor<MediaTypeInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -74,7 +77,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             Species: speciesCreator(sequelize),
             Animal: animalCreator(sequelize),
             Maintenance: maintenanceCreator(sequelize),
-            Treatment: treatmentCreator(sequelize)
+            Treatment: treatmentCreator(sequelize),
+            MediaType: mediaTypeCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -153,6 +157,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Animal = props.Animal;
         this.Maintenance = props.Maintenance;
         this.Treatment = props.Treatment;
+        this.MediaType = props.MediaType;
     }
 
 }
