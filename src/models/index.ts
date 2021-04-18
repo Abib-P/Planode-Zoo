@@ -5,6 +5,7 @@ import jobCreator, {JobInstance} from "./job.model";
 import clientCreator, {ClientInstance} from "./client.model";
 import sessionCreator, {SessionInstance} from "./session.model";
 import employeeCreator, {EmployeeInstance} from "./employee.model";
+import absenceCreator, {AbsenceInstance} from "./Absence.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -12,6 +13,7 @@ export interface SequelizeManagerProps {
     Client: ModelCtor<ClientInstance>;
     Session: ModelCtor<SessionInstance>;
     Employee:  ModelCtor<EmployeeInstance>;
+    Absence: ModelCtor<AbsenceInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -23,6 +25,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Client: ModelCtor<ClientInstance>;
     Session: ModelCtor<SessionInstance>;
     Employee:  ModelCtor<EmployeeInstance>;
+    Absence: ModelCtor<AbsenceInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -46,7 +49,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             Job: jobCreator(sequelize),
             Client: clientCreator(sequelize),
             Session: sessionCreator(sequelize),
-            Employee: employeeCreator(sequelize)
+            Employee: employeeCreator(sequelize),
+            Absence: absenceCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -65,8 +69,10 @@ export class SequelizeManager implements SequelizeManagerProps {
             foreignKey: {
                 allowNull: true
             }
-        }); // User N Session
-        props.Employee.belongsTo(props.Job); // Session 1 User
+        });// Job N Employee
+        props.Employee.belongsTo(props.Job); // Employee 1 Job
+
+        props.Absence.belongsTo(props.Employee); // Absence 1 Employee
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -75,6 +81,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Client = props.Client;
         this.Session = props.Session;
         this.Employee = props.Employee;
+        this.Absence = props.Absence;
     }
 
 }
