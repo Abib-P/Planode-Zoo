@@ -6,7 +6,8 @@ import clientCreator, {ClientInstance} from "./client.model";
 import sessionCreator, {SessionInstance} from "./session.model";
 import employeeCreator, {EmployeeInstance} from "./employee.model";
 import absenceCreator, {AbsenceInstance} from "./absence.model";
-import spaceTypeCreator, {SpaceTypeInstance} from "./espaceType.model";
+import spaceTypeCreator, {SpaceTypeInstance} from "./spaceType.model";
+import spaceCreator, {SpaceInstance} from "./space.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -16,6 +17,7 @@ export interface SequelizeManagerProps {
     Employee:  ModelCtor<EmployeeInstance>;
     Absence: ModelCtor<AbsenceInstance>;
     SpaceType:  ModelCtor<SpaceTypeInstance>;
+    Space: ModelCtor<SpaceInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -29,6 +31,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Employee:  ModelCtor<EmployeeInstance>;
     Absence: ModelCtor<AbsenceInstance>;
     SpaceType:  ModelCtor<SpaceTypeInstance>;
+    Space: ModelCtor<SpaceInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -54,7 +57,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             Session: sessionCreator(sequelize),
             Employee: employeeCreator(sequelize),
             Absence: absenceCreator(sequelize),
-            SpaceType: spaceTypeCreator(sequelize)
+            SpaceType: spaceTypeCreator(sequelize),
+            Space: spaceCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -76,7 +80,20 @@ export class SequelizeManager implements SequelizeManagerProps {
         });// Job N Employee
         props.Employee.belongsTo(props.Job); // Employee 1 Job
 
+        props.Employee.hasMany(props.Absence, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Employee N Absence
         props.Absence.belongsTo(props.Employee); // Absence 1 Employee
+
+        props.SpaceType.hasMany(props.Space, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// SpaceType N Space
+        props.Space.belongsTo(props.SpaceType); // Space 1 SpaceType
+
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -87,6 +104,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Employee = props.Employee;
         this.Absence = props.Absence;
         this.SpaceType = props.SpaceType;
+        this.Space = props.Space;
     }
 
 }
