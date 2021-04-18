@@ -9,6 +9,7 @@ import absenceCreator, {AbsenceInstance} from "./absence.model";
 import spaceTypeCreator, {SpaceTypeInstance} from "./spaceType.model";
 import spaceCreator, {SpaceInstance} from "./space.model";
 import speciesCreator, {SpeciesInstance} from "./species.model";
+import animalCreator, {AnimalInstance} from "./animal.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -20,6 +21,7 @@ export interface SequelizeManagerProps {
     SpaceType:  ModelCtor<SpaceTypeInstance>;
     Space: ModelCtor<SpaceInstance>;
     Species: ModelCtor<SpeciesInstance>;
+    Animal: ModelCtor<AnimalInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -35,6 +37,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     SpaceType:  ModelCtor<SpaceTypeInstance>;
     Space: ModelCtor<SpaceInstance>;
     Species: ModelCtor<SpeciesInstance>;
+    Animal: ModelCtor<AnimalInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -62,7 +65,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             Absence: absenceCreator(sequelize),
             SpaceType: spaceTypeCreator(sequelize),
             Space: spaceCreator(sequelize),
-            Species: speciesCreator(sequelize)
+            Species: speciesCreator(sequelize),
+            Animal: animalCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -98,6 +102,20 @@ export class SequelizeManager implements SequelizeManagerProps {
         });// SpaceType N Space
         props.Space.belongsTo(props.SpaceType); // Space 1 SpaceType
 
+        props.Species.hasMany(props.Animal, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Species N Animal
+        props.Animal.belongsTo(props.Species); // Animal 1 Species
+
+        props.Space.hasMany(props.Animal, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Space N Animal
+        props.Animal.belongsTo(props.Space); // Animal 1 Space
+
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -110,6 +128,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.SpaceType = props.SpaceType;
         this.Space = props.Space;
         this.Species = props.Species;
+        this.Animal = props.Animal;
     }
 
 }
