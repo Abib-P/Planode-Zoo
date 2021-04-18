@@ -4,12 +4,14 @@ import {Dialect} from "sequelize/types/lib/sequelize";
 import jobCreator, {JobInstance} from "./job.model";
 import clientCreator, {ClientInstance} from "./client.model";
 import sessionCreator, {SessionInstance} from "./session.model";
+import employeeCreator, {EmployeeInstance} from "./employee.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
     Job: ModelCtor<JobInstance>;
     Client: ModelCtor<ClientInstance>;
     Session: ModelCtor<SessionInstance>;
+    Employee:  ModelCtor<EmployeeInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -20,6 +22,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Job: ModelCtor<JobInstance>;
     Client: ModelCtor<ClientInstance>;
     Session: ModelCtor<SessionInstance>;
+    Employee:  ModelCtor<EmployeeInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -42,7 +45,8 @@ export class SequelizeManager implements SequelizeManagerProps {
             sequelize,
             Job: jobCreator(sequelize),
             Client: clientCreator(sequelize),
-            Session: sessionCreator(sequelize)
+            Session: sessionCreator(sequelize),
+            Employee: employeeCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -56,6 +60,13 @@ export class SequelizeManager implements SequelizeManagerProps {
             }
         }); // User N Session
         props.Session.belongsTo(props.Client); // Session 1 User
+
+        props.Job.hasMany(props.Employee, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // User N Session
+        props.Employee.belongsTo(props.Job); // Session 1 User
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -63,6 +74,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Job = props.Job;
         this.Client = props.Client;
         this.Session = props.Session;
+        this.Employee = props.Employee;
     }
 
 }
