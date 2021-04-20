@@ -4,12 +4,38 @@ import {Dialect} from "sequelize/types/lib/sequelize";
 import jobCreator, {JobInstance} from "./job.model";
 import clientCreator, {ClientInstance} from "./client.model";
 import sessionCreator, {SessionInstance} from "./session.model";
+import employeeCreator, {EmployeeInstance} from "./employee.model";
+import absenceCreator, {AbsenceInstance} from "./absence.model";
+import spaceTypeCreator, {SpaceTypeInstance} from "./spaceType.model";
+import spaceCreator, {SpaceInstance} from "./space.model";
+import speciesCreator, {SpeciesInstance} from "./species.model";
+import animalCreator, {AnimalInstance} from "./animal.model";
+import maintenanceCreator, {MaintenanceInstance} from "./maintenance.model";
+import treatmentCreator, {TreatmentInstance} from "./treatment.model";
+import mediaTypeCreator, {MediaTypeInstance} from "./mediaType.model";
+import mediaCreator, {MediaInstance} from "./media.model";
+import statCreator, {StatInstance} from "./Stat";
+import escapeGameCreator, {EscapeGameInstance} from "./escapeGame.model";
+import passCreator, {PassInstance} from "./pass.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
     Job: ModelCtor<JobInstance>;
     Client: ModelCtor<ClientInstance>;
     Session: ModelCtor<SessionInstance>;
+    Employee:  ModelCtor<EmployeeInstance>;
+    Absence: ModelCtor<AbsenceInstance>;
+    SpaceType:  ModelCtor<SpaceTypeInstance>;
+    Space: ModelCtor<SpaceInstance>;
+    Species: ModelCtor<SpeciesInstance>;
+    Animal: ModelCtor<AnimalInstance>;
+    Maintenance: ModelCtor<MaintenanceInstance>;
+    Treatment: ModelCtor<TreatmentInstance>;
+    MediaType: ModelCtor<MediaTypeInstance>;
+    Media: ModelCtor<MediaInstance>;
+    Stat: ModelCtor<StatInstance>;
+    EscapeGame: ModelCtor<EscapeGameInstance>;
+    Pass:  ModelCtor<PassInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -20,6 +46,19 @@ export class SequelizeManager implements SequelizeManagerProps {
     Job: ModelCtor<JobInstance>;
     Client: ModelCtor<ClientInstance>;
     Session: ModelCtor<SessionInstance>;
+    Employee:  ModelCtor<EmployeeInstance>;
+    Absence: ModelCtor<AbsenceInstance>;
+    SpaceType:  ModelCtor<SpaceTypeInstance>;
+    Space: ModelCtor<SpaceInstance>;
+    Species: ModelCtor<SpeciesInstance>;
+    Animal: ModelCtor<AnimalInstance>;
+    Maintenance: ModelCtor<MaintenanceInstance>;
+    Treatment: ModelCtor<TreatmentInstance>;
+    MediaType: ModelCtor<MediaTypeInstance>;
+    Media: ModelCtor<MediaInstance>;
+    Stat: ModelCtor<StatInstance>;
+    EscapeGame: ModelCtor<EscapeGameInstance>;
+    Pass:  ModelCtor<PassInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -42,7 +81,20 @@ export class SequelizeManager implements SequelizeManagerProps {
             sequelize,
             Job: jobCreator(sequelize),
             Client: clientCreator(sequelize),
-            Session: sessionCreator(sequelize)
+            Session: sessionCreator(sequelize),
+            Employee: employeeCreator(sequelize),
+            Absence: absenceCreator(sequelize),
+            SpaceType: spaceTypeCreator(sequelize),
+            Space: spaceCreator(sequelize),
+            Species: speciesCreator(sequelize),
+            Animal: animalCreator(sequelize),
+            Maintenance: maintenanceCreator(sequelize),
+            Treatment: treatmentCreator(sequelize),
+            MediaType: mediaTypeCreator(sequelize),
+            Media: mediaCreator(sequelize),
+            Stat: statCreator(sequelize),
+            EscapeGame: escapeGameCreator(sequelize),
+            Pass: passCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
         await sequelize.sync();
@@ -56,6 +108,70 @@ export class SequelizeManager implements SequelizeManagerProps {
             }
         }); // User N Session
         props.Session.belongsTo(props.Client); // Session 1 User
+
+        props.Job.hasMany(props.Employee, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Job N Employee
+        props.Employee.belongsTo(props.Job); // Employee 1 Job
+
+        props.Employee.hasMany(props.Absence, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Employee N Absence
+        props.Absence.belongsTo(props.Employee); // Absence 1 Employee
+
+        props.SpaceType.hasMany(props.Space, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// SpaceType N Space
+        props.Space.belongsTo(props.SpaceType); // Space 1 SpaceType
+
+        props.Species.hasMany(props.Animal, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Species N Animal
+        props.Animal.belongsTo(props.Species); // Animal 1 Species
+
+        props.Space.hasMany(props.Animal, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Space N Animal
+        props.Animal.belongsTo(props.Space); // Animal 1 Space
+
+        props.Space.hasMany(props.Maintenance, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Space N Maintenance
+        props.Maintenance.belongsTo(props.Space); // Maintenance 1 Space
+
+        props.Animal.hasMany(props.Treatment, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// Animal N Treatment
+        props.Treatment.belongsTo(props.Animal); // Treatment 1 Animal
+
+        props.MediaType.hasMany(props.Media, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// MediaType N Media
+        props.Media.belongsTo(props.MediaType); // Media 1 MediaType
+
+        props.EscapeGame.hasMany(props.Pass, {
+            foreignKey: {
+                allowNull: true
+            }
+        });// EscapeGame N Pass
+        props.Pass.belongsTo(props.EscapeGame); // Pass 1 EscapeGame TODO -> Pass 1 or 0 EscapeGame
+
     }
 
     private constructor(props: SequelizeManagerProps) {
@@ -63,6 +179,19 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Job = props.Job;
         this.Client = props.Client;
         this.Session = props.Session;
+        this.Employee = props.Employee;
+        this.Absence = props.Absence;
+        this.SpaceType = props.SpaceType;
+        this.Space = props.Space;
+        this.Species = props.Species;
+        this.Animal = props.Animal;
+        this.Maintenance = props.Maintenance;
+        this.Treatment = props.Treatment;
+        this.MediaType = props.MediaType;
+        this.Media = props.Media;
+        this.Stat = props.Stat;
+        this.EscapeGame = props.EscapeGame;
+        this.Pass = props.Pass;
     }
 
 }
