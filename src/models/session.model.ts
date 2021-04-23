@@ -23,7 +23,6 @@ export interface SessionInstance extends Model<SessionProps, SessionCreationProp
 
     setEmployee: BelongsToSetAssociationMixin<EmployeeInstance, "id">;
     getEmployee: BelongsToGetAssociationMixin<EmployeeInstance>;
-
 }
 
 export default function(sequelize: Sequelize): ModelCtor<SessionInstance> {

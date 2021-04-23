@@ -17,6 +17,11 @@ import mediaCreator, {MediaInstance} from "./media.model";
 import statCreator, {StatInstance} from "./Stat";
 import escapeGameCreator, {EscapeGameInstance} from "./escapeGame.model";
 import passCreator, {PassInstance} from "./pass.model";
+import animalMediaCreator, {AnimalMediaInstance} from "./animalMedia.model";
+import spaceMediaCreator, {SpaceMediaInstance} from "./spaceMedia.model";
+import clientPassCreator, {ClientPassInstance} from "./clientPass.model";
+import visiteCreator, {VisiteInstance} from "./visite.model";
+import pathCreator, {PathInstance} from "./path.model";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;
@@ -36,6 +41,11 @@ export interface SequelizeManagerProps {
     Stat: ModelCtor<StatInstance>;
     EscapeGame: ModelCtor<EscapeGameInstance>;
     Pass:  ModelCtor<PassInstance>;
+    AnimalMedia: ModelCtor<AnimalMediaInstance>;
+    SpaceMedia: ModelCtor<SpaceMediaInstance>;
+    CLientPass: ModelCtor<ClientPassInstance>;
+    Visite: ModelCtor<VisiteInstance>;
+    Path: ModelCtor<PathInstance>;
 }
 
 export class SequelizeManager implements SequelizeManagerProps {
@@ -59,6 +69,11 @@ export class SequelizeManager implements SequelizeManagerProps {
     Stat: ModelCtor<StatInstance>;
     EscapeGame: ModelCtor<EscapeGameInstance>;
     Pass:  ModelCtor<PassInstance>;
+    AnimalMedia: ModelCtor<AnimalMediaInstance>;
+    SpaceMedia: ModelCtor<SpaceMediaInstance>;
+    CLientPass: ModelCtor<ClientPassInstance>;
+    Visite: ModelCtor<VisiteInstance>;
+    Path: ModelCtor<PathInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
         if(SequelizeManager.instance === undefined) {
@@ -94,14 +109,96 @@ export class SequelizeManager implements SequelizeManagerProps {
             Media: mediaCreator(sequelize),
             Stat: statCreator(sequelize),
             EscapeGame: escapeGameCreator(sequelize),
-            Pass: passCreator(sequelize)
+            Pass: passCreator(sequelize),
+            AnimalMedia: animalMediaCreator(sequelize),
+            SpaceMedia: spaceMediaCreator(sequelize),
+            CLientPass: clientPassCreator(sequelize),
+            Visite: visiteCreator(sequelize),
+            Path: pathCreator(sequelize)
         }
         SequelizeManager.associate(managerProps);
-        await sequelize.sync();
+        await sequelize.sync({
+            force: true //Permet de recréer toutes les tables
+        });
         return new SequelizeManager(managerProps);
     }
 
     private static associate(props: SequelizeManagerProps): void {
+
+        // animal media
+        props.Media.hasMany( props.AnimalMedia );
+        props.AnimalMedia.belongsTo(
+            props.Media, {
+                foreignKey: "mediaId"
+            }
+        );
+        props.Animal.hasMany( props.AnimalMedia );
+        props.AnimalMedia.belongsTo(
+            props.Animal, {
+                foreignKey: "animalId"
+            }
+        );
+        // animal media fin
+
+        // space media
+        props.Media.hasMany( props.SpaceMedia );
+        props.SpaceMedia.belongsTo(
+            props.Media, {
+                foreignKey: "mediaId"
+            }
+        );
+        props.Space.hasMany( props.SpaceMedia );
+        props.SpaceMedia.belongsTo(
+            props.Space, {
+                foreignKey: "spaceId"
+            }
+        );
+        // space media fin
+
+        props.Client.hasMany(props.CLientPass, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // Client 0:N ClientPass
+        props.CLientPass.belongsTo(props.Client); // ClientPass 1 Client
+
+        props.Pass.hasMany(props.CLientPass, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // Pass 0:N ClientPass
+        props.CLientPass.belongsTo(props.Pass); // ClientPass 1 Pass
+
+        props.CLientPass.hasMany(props.Visite, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // ClientPass 0:N Visite
+        props.Visite.belongsTo(props.CLientPass); //Visite 1 ClientPass
+
+        props.Space.hasMany(props.Visite, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // Space 0:N Visite
+        props.Visite.belongsTo(props.Space); //Visite 1 Space
+
+        props.EscapeGame.hasMany(props.Path, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // EscapeGame 0:N Path
+        props.Path.belongsTo(props.EscapeGame); // Path 1 EscapeGame
+
+        props.Space.hasMany(props.Path, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // Space 0:N Path
+        props.Path.belongsTo(props.Space); // Path 1 Space
+
+        // ################################################################################
+
         props.Client.hasMany(props.Session, {
             foreignKey: {
                 allowNull: true
@@ -199,6 +296,11 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Stat = props.Stat;
         this.EscapeGame = props.EscapeGame;
         this.Pass = props.Pass;
+        this.AnimalMedia = props.AnimalMedia;
+        this.SpaceMedia = props.SpaceMedia;
+        this.CLientPass = props.CLientPass;
+        this.Visite = props.Visite;
+        this.Path = props.Path;
     }
 
 }
