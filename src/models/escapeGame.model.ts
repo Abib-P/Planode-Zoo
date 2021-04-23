@@ -20,7 +20,7 @@ export interface EscapeGameInstance extends Model<EscapeGameProps, EscapeGameCre
 }
 
 export default function(sequelize: Sequelize): ModelCtor<EscapeGameInstance> {
-    return sequelize.define<EscapeGameInstance>("escape game", {
+    return sequelize.define<EscapeGameInstance>("escapeGame", {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,

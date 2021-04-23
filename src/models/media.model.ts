@@ -20,7 +20,7 @@ export interface MediaInstance extends Model<MediaProps, MediaCreationProps>, Me
 }
 
 export default function(sequelize: Sequelize): ModelCtor<MediaInstance> {
-    return sequelize.define<MediaInstance>("media", {
+    return sequelize.define<MediaInstance>("Media", {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,

@@ -17,7 +17,7 @@ export interface SpaceTypeCreationProps extends Optional<SpaceTypeProps, "id"> {
 export interface SpaceTypeInstance extends Model<SpaceTypeProps, SpaceTypeCreationProps>, SpaceTypeProps {}
 
 export default function(sequelize: Sequelize): ModelCtor<SpaceTypeInstance> {
-    return sequelize.define<SpaceTypeInstance>("Space Type", {
+    return sequelize.define<SpaceTypeInstance>("spaceType", {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
