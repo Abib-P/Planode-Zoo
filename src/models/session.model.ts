@@ -7,6 +7,7 @@ import {
     BelongsToSetAssociationMixin, BelongsToGetAssociationMixin
 } from "sequelize";
 import {ClientInstance} from "./client.model";
+import {EmployeeInstance} from "./employee.model";
 
 export interface SessionProps {
     id: number;
@@ -19,10 +20,10 @@ export interface SessionInstance extends Model<SessionProps, SessionCreationProp
     setClient: BelongsToSetAssociationMixin<ClientInstance, "id">;
     getClient: BelongsToGetAssociationMixin<ClientInstance>;
 
-    /*
-    setUser: BelongsToSetAssociationMixin<UserInstance, "id">;
-    getUser: BelongsToGetAssociationMixin<UserInstance>;
-     */
+
+    setEmployee: BelongsToSetAssociationMixin<EmployeeInstance, "id">;
+    getEmployee: BelongsToGetAssociationMixin<EmployeeInstance>;
+
 }
 
 export default function(sequelize: Sequelize): ModelCtor<SessionInstance> {

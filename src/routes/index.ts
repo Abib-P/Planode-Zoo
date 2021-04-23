@@ -4,6 +4,7 @@ import {authClientRouter} from "./authClient.router";
 import {spaceTypeRouter} from "./spaceType.roote";
 import {mediaTypeRouter} from "./mediaType.roote";
 import {mediaRouter} from "./media.roote";
+import {authEmployeeRouter} from "./authEmployee.router";
 
 export function buildRoutes(app: Express){
     app.use("/job", jobRouter);
@@ -11,4 +12,5 @@ export function buildRoutes(app: Express){
     app.use("/spaceType", spaceTypeRouter);
     app.use("/mediaType", mediaTypeRouter);
     app.use("/media", mediaRouter);
+    app.use("/employee", authEmployeeRouter);
 }

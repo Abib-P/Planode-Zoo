@@ -106,8 +106,15 @@ export class SequelizeManager implements SequelizeManagerProps {
             foreignKey: {
                 allowNull: true
             }
-        }); // User N Session
-        props.Session.belongsTo(props.Client); // Session 1 User
+        }); // Client N Session
+        props.Session.belongsTo(props.Client); // Session 1 Client
+
+        props.Client.hasMany(props.Session, {
+            foreignKey: {
+                allowNull: true
+            }
+        }); // Employee N Session
+        props.Session.belongsTo(props.Client); // Session 1 Employee
 
         props.Job.hasMany(props.Employee, {
             foreignKey: {

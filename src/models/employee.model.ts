@@ -3,7 +3,7 @@ import {
     Model,
     ModelCtor,
     DataTypes,
-    Sequelize, BelongsToSetAssociationMixin,
+    Sequelize, BelongsToSetAssociationMixin, BelongsToGetAssociationMixin,
 } from "sequelize";
 
 import {JobInstance} from "./job.model";
@@ -21,6 +21,7 @@ export interface EmployeeCreationProps extends Optional<EmployeeProps, "id"> {}
 
 export interface EmployeeInstance extends Model<EmployeeProps, EmployeeCreationProps>, EmployeeProps {
     setJob: BelongsToSetAssociationMixin<JobInstance, "id">;
+    getJob: BelongsToGetAssociationMixin<JobInstance>;
 }
 
 export default function(sequelize: Sequelize): ModelCtor<EmployeeInstance> {
