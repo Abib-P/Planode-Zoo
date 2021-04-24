@@ -1,15 +1,16 @@
 import {
     Sequelize,
     Model,
-    ModelCtor,
+    ModelCtor, DataTypes, Optional,
 } from "sequelize";
 
 export interface SpaceMediaProps {
-    spaceId?: number;
-    mediaId?: number;
+    id: number;
+    space_id?: number;
+    media_id?: number;
 }
 
-export interface SpaceMediaCreationProps extends SpaceMediaProps{}
+export interface SpaceMediaCreationProps extends Optional<SpaceMediaProps, "id">{}
 
 export interface SpaceMediaInstance extends Model<SpaceMediaProps, SpaceMediaCreationProps>, SpaceMediaProps{
 
@@ -17,7 +18,19 @@ export interface SpaceMediaInstance extends Model<SpaceMediaProps, SpaceMediaCre
 
 export default function (sequelize: Sequelize): ModelCtor<SpaceMediaInstance> {
     return sequelize.define<SpaceMediaInstance>("spaceMedia",
-        {}, {
+        {
+            id: {
+                type: DataTypes.BIGINT,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            space_id: {
+                type: DataTypes.BIGINT
+            },
+            media_id: {
+                type: DataTypes.BIGINT
+            }
+        }, {
         timestamps: false,
         freezeTableName: true,
         underscored: true,

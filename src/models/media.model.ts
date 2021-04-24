@@ -11,6 +11,7 @@ export interface MediaProps {
     id: number;
     name: string;
     link: string;
+    media_type_id?: number;
 }
 
 export interface MediaCreationProps extends Optional<MediaProps, "id"> {}
@@ -31,6 +32,9 @@ export default function(sequelize: Sequelize): ModelCtor<MediaInstance> {
         },
         link: {
             type: DataTypes.STRING
+        },
+        media_type_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,

@@ -13,6 +13,7 @@ export interface TreatmentProps {
     start: Date;
     frequency: Date | null;
     nextOccurrence: Date;
+    animal_id?: number;
 }
 
 export interface TreatmentCreationProps extends Optional<TreatmentProps, "id"> {}
@@ -42,6 +43,9 @@ export default function(sequelize: Sequelize): ModelCtor<TreatmentInstance> {
         },
         nextOccurrence: {
             type: DataTypes.DATE
+        },
+        animal_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,

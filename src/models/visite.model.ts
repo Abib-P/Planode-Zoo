@@ -9,6 +9,8 @@ import {
 export interface VisiteProps{
     id: number;
     visiteDate: Date;
+    client_pass_id?: number;
+    space_id?: number;
 }
 
 export interface VisiteCreationProps extends Optional<VisiteProps, "id"> {}
@@ -26,6 +28,12 @@ export default function (sequelize: Sequelize): ModelCtor<VisiteInstance> {
         },
         visiteDate: {
             type: DataTypes.DATE
+        },
+        client_pass_id: {
+            type: DataTypes.BIGINT
+        },
+        space_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,

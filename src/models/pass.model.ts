@@ -11,6 +11,7 @@ export interface PassProps {
     id: number;
     name: string;
     durability: Date;
+    escape_game_id?: number;
 }
 
 export interface PassCreationProps extends Optional<PassProps, "id"> {}
@@ -31,6 +32,9 @@ export default function(sequelize: Sequelize): ModelCtor<PassInstance> {
         },
         durability: {
             type: DataTypes.DATE
+        },
+        escape_game_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,
