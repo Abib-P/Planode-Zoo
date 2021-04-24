@@ -41,9 +41,7 @@ export class JobController {
         const job = await JobController.instance.getOne(props.id);
         if (job != null){
             return job.update(
-                {
-                    name: props.name
-                }
+                props
             );
         }
         return null;
