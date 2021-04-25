@@ -39,7 +39,6 @@ export default function(sequelize: Sequelize): ModelCtor<AnimalMediaInstance> {
         }, {
             timestamps: false,
             freezeTableName: true,
-            underscored: true,
             paranoid: true,
         }
     );
