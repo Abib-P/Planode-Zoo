@@ -96,7 +96,6 @@ export class SpaceController {
                     d = space.endTime;
                 } else {
                     d = new Date();
-                    console.log("SUCE MOI"); //TODO rename
                 }
 
                 if (!this.verifyDate(props.startTime !== undefined ? props.startTime : space.startTime,
