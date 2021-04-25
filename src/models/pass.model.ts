@@ -38,7 +38,6 @@ export default function(sequelize: Sequelize): ModelCtor<PassInstance> {
         }
     }, {
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         timestamps: true
     });

@@ -18,6 +18,7 @@ import {animalMediaRouter} from './animalMedia.route';
 import {spaceMediaRouter} from './spaceMedia.route';
 import {visitRouter} from "./visit.route";
 import {animalRouter} from "./animal.route";
+import {pathRouter} from "./path.route"
 
 export function buildRoutes(app: Express){
     app.use("/job", jobRouter);
@@ -39,5 +40,5 @@ export function buildRoutes(app: Express){
     app.use("/animalMedia", animalMediaRouter);
     app.use("/visit", visitRouter);
     app.use("/animal", animalRouter);
-
+    app.use("/path", pathRouter);
 }
