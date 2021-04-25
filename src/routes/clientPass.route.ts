@@ -16,7 +16,7 @@ clientPassRouter.post("/", async function(req, res){
         return;
     }
 
-    const clientPassController = await ClientPassController.getinstance();
+    const clientPassController = await ClientPassController.getInstance();
     const clientPass = await clientPassController.create(
         {
             buyingDate: new Date(buyingDate),
@@ -35,7 +35,7 @@ clientPassRouter.post("/", async function(req, res){
 });
 
 clientPassRouter.get("/", async function(req, res){
-    const clientPassController = await ClientPassController.getinstance();
+    const clientPassController = await ClientPassController.getInstance();
     const clientPass = await clientPassController.getAll();
 
     if (clientPass != null){
@@ -49,7 +49,7 @@ clientPassRouter.get("/", async function(req, res){
 
 clientPassRouter.get("/:id", async function(req, res){
     const {id} = req.params;
-    const clientPassController = await ClientPassController.getinstance();
+    const clientPassController = await ClientPassController.getInstance();
     const clientPass = await clientPassController.getOne(Number.parseInt(id));
 
     if (clientPass != null){
@@ -62,7 +62,7 @@ clientPassRouter.get("/:id", async function(req, res){
 
 clientPassRouter.get("/client/:clientId", async function (req, res){
     const {clientId} = req.params;
-    const clientPassController = await ClientPassController.getinstance();
+    const clientPassController = await ClientPassController.getInstance();
     const clientPass = await clientPassController.getAllToClient(Number.parseInt(clientId));
 
     if (clientPass != null){
@@ -87,7 +87,7 @@ clientPassRouter.put("/", async function(req, res){
         return;
     }
 
-    const clientPassController = await ClientPassController.getinstance();
+    const clientPassController = await ClientPassController.getInstance();
     const clientPass = await clientPassController.update(
         {
             id,
@@ -108,7 +108,7 @@ clientPassRouter.put("/", async function(req, res){
 
 clientPassRouter.delete("/:id", async function(req, res){
     const {id} = req.params;
-    const clientPassController = await ClientPassController.getinstance();
+    const clientPassController = await ClientPassController.getInstance();
     const affectedRows = await clientPassController.delete(Number.parseInt(id));
 
     if (affectedRows > 0){
