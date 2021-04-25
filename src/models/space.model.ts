@@ -14,10 +14,28 @@ export interface SpaceProps {
     capacity: number;
     currentVisitor: number;
     handicapAccessibility: boolean;
+    startTime: Date;
+    endTime?: Date;
     openingDayTime: number;
     closingDayTime: number;
     openingNightTime: number;
     closingNightTime: number;
+    space_type_id?: number;
+}
+
+export interface SpaceUpdateProps {
+    id: number;
+    name?: string;
+    description?: string;
+    capacity?: number ;
+    currentVisitor?: number;
+    handicapAccessibility?: boolean;
+    startTime?: Date;
+    endTime?: Date;
+    openingDayTime?: number;
+    closingDayTime?: number;
+    openingNightTime?: number;
+    closingNightTime?: number;
     space_type_id?: number;
 }
 
@@ -36,6 +54,12 @@ export default function(sequelize: Sequelize): ModelCtor<SpaceInstance> {
         },
         name: {
             type: DataTypes.STRING
+        },
+        startTime: {
+            type: DataTypes.DATE
+        },
+        endTime: {
+            type: DataTypes.DATE
         },
         description: {
             type: DataTypes.STRING

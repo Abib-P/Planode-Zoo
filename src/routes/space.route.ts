@@ -1,6 +1,6 @@
 import express from "express";
 import {SpaceController} from "../controllers/space.controller";
-
+import {parseDate} from "../utils/date.utils";
 
 const spaceRouter = express.Router();
 
@@ -15,7 +15,9 @@ spaceRouter.post("/", async function(req, res){
         closingDayTime,
         openingNightTime,
         closingNightTime,
-        space_type_id
+        space_type_id,
+        startTime,
+        endTime
     } = req.body;
 
     if (
@@ -23,11 +25,32 @@ spaceRouter.post("/", async function(req, res){
         description === undefined ||
         capacity === undefined ||
         handicapAccessibility === undefined ||
-        space_type_id === undefined
+        space_type_id === undefined ||
+        startTime === undefined
     ){
         res.status(400).end();
         return;
     }
+
+    const startDate = parseDate(startTime);
+    if( startDate === null){
+        res.status(400).end();
+        return;
+    }
+
+    let endDate = undefined;
+    if( endTime !== undefined ){
+
+        endDate = parseDate(endTime);
+        if( endDate === null){
+            res.status(400).end();
+            return;
+        }
+        if( endDate < startDate){
+            res.status(400).end();
+        }
+    }
+
 
     if (verifyOpeningDayTimeTable(openingDayTime, closingDayTime)){
         res.status(400).end();
@@ -51,8 +74,9 @@ spaceRouter.post("/", async function(req, res){
             openingDayTime,
             closingDayTime,
             openingNightTime,
-            closingNightTime
-
+            closingNightTime,
+            startTime: startDate,
+            endTime: endDate
         }, Number.parseInt(space_type_id)
     );
     if (space !== null){
@@ -100,20 +124,34 @@ spaceRouter.put("/", async function (req, res){
         closingDayTime,
         openingNightTime,
         closingNightTime,
-        space_type_id
+        space_type_id,
+        startTime,
+        endTime
     } = req.body;
 
-    if (
-        id === undefined ||
-        name === undefined ||
-        description === undefined ||
-        capacity === undefined ||
-        handicapAccessibility === undefined ||
-        space_type_id === undefined
-    ){
+    if (id === undefined  ){
         res.status(400).end();
         return;
     }
+
+    let startDate = undefined;
+    if (startTime !== undefined) {
+        startDate = parseDate(startTime);
+        if (startDate === null) {
+            res.status(400).end();
+            return;
+        }
+    }
+
+    let endDate = undefined;
+    if( endTime !== undefined ){
+        endDate = parseDate(endTime);
+        if( endDate === null){
+            res.status(400).end();
+            return;
+        }
+    }
+
 
     if (verifyOpeningDayTimeTable(openingDayTime, closingDayTime)){
         res.status(400).end();
@@ -132,13 +170,15 @@ spaceRouter.put("/", async function (req, res){
             id,
             name,
             description,
-            capacity: Number.parseInt(capacity),
+            capacity: capacity !== undefined ?Number.parseInt(capacity): undefined,
             currentVisitor: 0,
             handicapAccessibility,
             openingDayTime,
             closingDayTime,
             openingNightTime,
-            closingNightTime
+            closingNightTime,
+            startTime: startDate,
+            endTime: endDate
         }, space_type_id
     );
 
