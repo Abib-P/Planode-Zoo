@@ -13,6 +13,9 @@ import {clientPassRouter} from './clientPass.route';
 import {treatmentRouter} from './treatment.route';
 import {maintenanceRouter} from './maintenance.route';
 import {speciesRouter} from './species.route';
+import {spaceRouter} from './space.route';
+import {animalMediaRouter} from './animalMedia.route';
+import {spaceMediaRouter} from './spaceMedia.route';
 
 export function buildRoutes(app: Express){
     app.use("/job", jobRouter);
@@ -29,4 +32,7 @@ export function buildRoutes(app: Express){
     app.use("/treatment", treatmentRouter);
     app.use("/maintenance", maintenanceRouter);
     app.use("/species", speciesRouter);
+    app.use("/space", spaceRouter);
+    app.use("/spaceMedia", spaceMediaRouter);
+    app.use("/animalMedia", animalMediaRouter);
 }
