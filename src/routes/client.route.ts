@@ -34,11 +34,7 @@ clientRouter.get("/:id", async function(req, res){
 clientRouter.put("/", async function(req, res){
     const {id, name, email, password} = req.body;
 
-    if (id === undefined ||
-        name === undefined ||
-        email === undefined ||
-        password === undefined
-    ) {
+    if (id === undefined ) {
         res.status(400).end();
         return;
     }

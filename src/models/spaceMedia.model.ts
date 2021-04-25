@@ -40,7 +40,6 @@ export default function (sequelize: Sequelize): ModelCtor<SpaceMediaInstance> {
         }, {
         timestamps: false,
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         }
     );

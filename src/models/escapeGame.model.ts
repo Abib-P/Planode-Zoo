@@ -37,7 +37,6 @@ export default function(sequelize: Sequelize): ModelCtor<EscapeGameInstance> {
         },
     }, {
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         timestamps: true
     });

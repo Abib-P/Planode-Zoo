@@ -36,12 +36,12 @@ export class ClientController {
     public async update(props: ClientProps): Promise<ClientInstance | null> {
         const Client = await ClientController.instance.getOne(props.id);
         if (Client != null){
-            const passwordHashed = await hash(props.password, 5);
+
+            if (props.password != undefined){
+                props.password = await hash(props.password, 5);
+            }
             return Client.update(
-                {
-                    ...props,
-                    password: passwordHashed
-                }
+                props
             );
         }
         return null;
