@@ -40,6 +40,5 @@ export function buildRoutes(app: Express){
     app.use("/animalMedia", animalMediaRouter);
     app.use("/visit", visitRouter);
     app.use("/animal", animalRouter);
-    app.use("/space", spaceRouter);
     app.use("/path", pathRouter);
 }
