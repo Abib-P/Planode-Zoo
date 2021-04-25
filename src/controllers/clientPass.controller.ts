@@ -1,17 +1,25 @@
-import {ModelCtor} from "sequelize";
-import {ClientPassCreationProps, ClientPassInstance, ClientPassProps} from "../models/clientPass.model";
+import {ModelCtor, Op, where} from "sequelize";
+import {
+    ClientPassCreationProps,
+    ClientPassInstance,
+    ClientPassProps,
+    ClientPassUpdateProps
+} from "../models/clientPass.model";
+
 import {ClientInstance} from "../models/client.model";
 import {PassInstance} from "../models/pass.model";
 import {SequelizeManager} from "../models";
+import {verifyDate} from "../utils/date.utils";
+import {buildRoutes} from "../routes";
 
-export class ClientPassController {
+export class ClientPassController{
     ClientPass: ModelCtor<ClientPassInstance>;
     Client: ModelCtor<ClientInstance>;
     Pass: ModelCtor<PassInstance>;
 
     private static instance: ClientPassController;
 
-    public static async getInstance(): Promise<ClientPassController> {
+    public static async getInstance(): Promise<ClientPassController>{
         if (ClientPassController.instance === undefined) {
             const {ClientPass, Client, Pass} = await SequelizeManager.getInstance();
             ClientPassController.instance = new ClientPassController(ClientPass, Client, Pass);
@@ -25,7 +33,11 @@ export class ClientPassController {
         this.Pass = Pass;
     }
 
-    public async create(props: ClientPassCreationProps, clientId: number, passId: number): Promise<ClientPassInstance | null> {
+    public async create(props: ClientPassCreationProps, clientId: number, passId: number): Promise<ClientPassInstance | null>{
+
+        if( !verifyDate(props.startDate, props.endDate) || !verifyDate(props.buyingDate, props.startDate)){
+            return null;
+        }
 
         const client = await this.Client.findOne({
             where: {
@@ -41,12 +53,12 @@ export class ClientPassController {
                 id: passId
             }
         });
-        if (pass === null) {
+        if (pass === null){
             return null;
         }
 
-        let clientPass = await this.ClientPass.create(props);
-        if (clientPass === null) {
+        let clientPass = await this.ClientPass.create( props );
+        if (clientPass === null){
             return null;
         } else {
             clientPass.setClient(client);
@@ -55,11 +67,25 @@ export class ClientPassController {
         }
     }
 
-    public async getAll(): Promise<ClientPassInstance[] | null> {
-        return this.ClientPass.findAll();
+    public async getAll(buyingDate: Date | undefined): Promise<ClientPassInstance[] |null>{
+        if( buyingDate === undefined) {
+            return this.ClientPass.findAll();
+        }else{
+            let endDate = new Date(buyingDate);
+            endDate.setDate(endDate.getDate()+1);
+
+            return this.ClientPass.findAll({
+                where: {
+                    buyingDate: {
+                        [Op.lt]: endDate,
+                        [Op.gte]: buyingDate
+                    }
+                }
+            });
+        }
     }
 
-    public async getOne(id: number): Promise<ClientPassInstance | null> {
+    public async getOne(id: number): Promise<ClientPassInstance | null>{
         return this.ClientPass.findOne({
             where: {
                 id
@@ -67,7 +93,7 @@ export class ClientPassController {
         });
     }
 
-    public async getAllToClient(clientId: number): Promise<ClientPassInstance[] | null> {
+    public async getAllToClient(clientId: number): Promise<ClientPassInstance[] | null >{
         return this.ClientPass.findAll({
             where: {
                 client_id: clientId
@@ -75,7 +101,15 @@ export class ClientPassController {
         });
     }
 
-    public async update(props: ClientPassProps, clientId: number, passId: number): Promise<ClientPassInstance | null> {
+    public async getAllToPass(pass_id: number): Promise<ClientPassInstance[] | null >{
+        return this.ClientPass.findAll({
+            where: {
+                pass_id
+            }
+        });
+    }
+
+    public async update(props: ClientPassUpdateProps, clientId: number, passId: number): Promise<ClientPassInstance | null>{
 
         const client = await this.Client.findOne({
             where: {
@@ -91,23 +125,33 @@ export class ClientPassController {
                 id: passId
             }
         });
-        if (pass === null) {
+        if (pass === null){
             return null;
         }
 
-        let clientPass = await ClientPassController.instance.getOne(props.id);
-        if (clientPass === null) {
+        let clientPass = await ClientPassController.instance.getOne( props.id );
+        if (clientPass === null){
             return null;
         } else {
+
+            if( !verifyDate(props.startDate !== undefined? props.startDate: clientPass.startDate,
+                            props.endDate !== undefined? props.endDate: clientPass.endDate)
+                ||
+                !verifyDate(props.buyingDate !== undefined? props.buyingDate: clientPass.buyingDate,
+                            props.startDate !== undefined? props.startDate: clientPass.startDate) )
+            {
+                return null;
+            }
+
             await clientPass.setClient(client);
             await clientPass.setPass(pass);
             return clientPass.update(props);
         }
     }
 
-    public async delete(id: number): Promise<number> {
-        const clientPass = await ClientPassController.instance.getOne(id);
-        if (clientPass != null) {
+    public async delete(id: number): Promise<number>{
+        const clientPass = await ClientPassController.instance.getOne( id );
+        if (clientPass != null){
             return this.ClientPass.destroy({
                 where: {
                     id: clientPass.id

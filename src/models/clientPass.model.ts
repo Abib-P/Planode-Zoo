@@ -18,6 +18,16 @@ export interface ClientPassProps {
     pass_id?: number;
 }
 
+export interface ClientPassUpdateProps {
+    id: number;
+    buyingDate?: Date;
+    startDate?: Date;
+    endDate?: Date;
+    currentPos?: number;
+    client_id?: number;
+    pass_id?: number;
+}
+
 export interface ClientPassCreationProps extends Optional<ClientPassProps, "id">{}
 
 export interface ClientPassInstance extends Model<ClientPassProps, ClientPassCreationProps>, ClientPassProps{

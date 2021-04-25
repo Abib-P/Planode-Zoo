@@ -1,7 +1,8 @@
 import {ModelCtor} from "sequelize";
-import {AbsenceCreationProps, AbsenceInstance, AbsenceProps} from "../models/absence.model";
+import {AbsenceCreationProps, AbsenceInstance, AbsenceProps, AbsenceUpdateProps} from "../models/absence.model";
 import {EmployeeInstance} from "../models/employee.model";
 import {SequelizeManager} from "../models";
+import {verifyDate} from "../utils/date.utils";
 
 export class AbsenceController {
     Absence: ModelCtor<AbsenceInstance>;
@@ -23,6 +24,11 @@ export class AbsenceController {
     }
 
     public async create(props: AbsenceCreationProps, employeeId: number): Promise<AbsenceInstance | null>{
+
+        if( ! verifyDate(props.start, props.end)){
+            return  null;
+        }
+
         const employee = await this.Employee.findOne({
             where: {
                 id: employeeId
@@ -50,9 +56,16 @@ export class AbsenceController {
         return this.Absence.findAll();
     }
 
-    public async update(props: AbsenceProps): Promise<AbsenceInstance | null>{
+    public async update(props: AbsenceUpdateProps): Promise<AbsenceInstance | null>{
         let absence = await AbsenceController.instance.getOne(props.id);
         if (absence != null){
+
+            if (!verifyDate(props.start !== undefined? props.start: absence.start,
+                            props.end !== undefined? props.end: absence.end))
+            {
+                return null;
+            }
+
             return absence.update(
                 props
             );

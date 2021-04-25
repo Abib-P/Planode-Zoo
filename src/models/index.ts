@@ -160,6 +160,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         // space media fin
 
         props.Client.hasMany(props.ClientPass, {
+            foreignKey: "client_id",
             as: "clientPassByClient"
         }); // Client 0:N ClientPass
 

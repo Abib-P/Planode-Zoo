@@ -1,6 +1,13 @@
 import {ModelCtor} from "sequelize";
 import {SequelizeManager} from "../models";
-import {EscapeGameCreationProps, EscapeGameInstance, EscapeGameProps} from "../models/escapeGame.model";
+import {
+    EscapeGameCreationProps,
+    EscapeGameInstance,
+    EscapeGameProps,
+    EscapeGameUpdateProps
+} from "../models/escapeGame.model";
+import {verifyDate} from "../utils/date.utils";
+
 
 export class EscapeGameController {
 
@@ -21,6 +28,11 @@ export class EscapeGameController {
     }
 
     public async create(props: EscapeGameCreationProps): Promise<EscapeGameInstance | null> {
+
+        if( ! verifyDate(props.start, props.end)){
+            return null;
+        }
+
         return this.EscapeGame.create(props);
     }
 
@@ -36,9 +48,16 @@ export class EscapeGameController {
         return this.EscapeGame.findAll();
     }
 
-    public async update(props: EscapeGameProps): Promise<EscapeGameInstance | null> {
+    public async update(props: EscapeGameUpdateProps): Promise<EscapeGameInstance | null> {
         const escapeGame = await EscapeGameController.instance.getOne(props.id);
-        if (escapeGame != null) {
+        if (escapeGame != null){
+
+            if( !verifyDate(props.start !== undefined? props.start: escapeGame.start,
+                            props.end !== undefined? props.end: escapeGame.end) )
+            {
+                return null;
+            }
+
             return escapeGame.update(
                 props
             );

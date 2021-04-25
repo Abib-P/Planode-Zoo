@@ -1,23 +1,39 @@
 import express from "express";
 import {EscapeGameController} from "../controllers/escapeGame.controller";
+import {parseDate} from "../utils/date.utils";
 
 const escapeGameRouter = express.Router();
 
 escapeGameRouter.post("/", async function(req, res) {
-    const {name, start, end} = req.body;
+    const {name, startDate, endDate} = req.body;
+
     if (name === undefined ||
-        start === undefined ||
-        end === undefined
+        startDate === undefined ||
+        endDate === undefined
     ) {
         res.status(400).end();
         return;
     }
+
+    const start = parseDate(startDate);
+    if(start == null){
+        res.status(400).end();
+        return;
+    }
+
+    const end = parseDate(endDate);
+    if(end == null){
+        res.status(400).end();
+        return;
+    }
+
     const escapeGameController = await EscapeGameController.getInstance();
     const escapeGame = await escapeGameController.create({
         name,
-        start: new Date(start),
-        end: new Date(end)
+        start,
+        end
     });
+
     if (escapeGame != null) {
         res.status(201);
         res.json(escapeGame);
@@ -54,26 +70,44 @@ escapeGameRouter.get("/:id", async function (req, res) {
 });
 
 escapeGameRouter.put("/", async function (req, res){
-    const {id, name, start, end} = req.body;
+    const {id, name, startDate, endDate} = req.body;
 
-    if (id === undefined || name === undefined){
+    if (id === undefined){
         res.status(400).end();
         return;
+    }
+
+    let start;
+    if( startDate !== undefined) {
+        start = parseDate(startDate);
+        if (start == null) {
+            res.status(400).end();
+            return;
+        }
+    }
+
+    let end;
+    if( endDate !== undefined) {
+        end = parseDate(endDate);
+        if (end == null) {
+            res.status(400).end();
+            return;
+        }
     }
 
     const escapeGameController = await EscapeGameController.getInstance();
     const escapeGame = await escapeGameController.update({
         id,
         name,
-        start: new Date(start),
-        end: new Date(end)
+        start,
+        end
     });
 
     if (escapeGame != null) {
         res.status(200);
         res.json(escapeGame);
     } else {
-        res.status(400).end();
+        res.status(409).end();
     }
 });
 

@@ -1,13 +1,15 @@
 import express from "express";
 import {AbsenceController} from "../controllers/absence.controller";
+import {parseDate} from "../utils/date.utils";
 
 
 const absenceRouter = express.Router()
 
 absenceRouter.post("/", async function (req, res){
-    const {start, end, isValidated, employeeId} = req.body;
-    if (start === undefined ||
-        end === undefined||
+    const {startDate, endDate, isValidated, employeeId} = req.body;
+
+    if (startDate === undefined ||
+        endDate === undefined||
         isValidated === undefined ||
         employeeId === undefined
     ){
@@ -15,11 +17,23 @@ absenceRouter.post("/", async function (req, res){
         return;
     }
 
+    const start = parseDate(startDate);
+    if( start === null){
+        res.status(400).end();
+        return;
+    }
+
+    const end = parseDate(endDate);
+    if( end === null){
+        res.status(400).end();
+        return;
+    }
+
     const absenceController = await AbsenceController.getInstance();
     const absence = await absenceController.create(
         {
-            start: new Date(start),
-            end: new Date(end),
+            start,
+            end,
             isValidated
         }, employeeId
     );
@@ -58,22 +72,37 @@ absenceRouter.get("/:id", async function(req, res){
 });
 
 absenceRouter.put("/", async function (req, res){
-    const {id, start, end, isValidated} = req.body;
+    const {id, startDate, endDate, isValidated} = req.body;
 
-    if (id === undefined ||
-        start === undefined ||
-        end === undefined||
-        isValidated === undefined
-    ){
+    if (id === undefined ){
         res.status(400).end();
         return;
     }
 
+    let start;
+    if( startDate !==undefined) {
+        start = parseDate(startDate);
+        if (start === null) {
+            res.status(400).end();
+            return;
+        }
+    }
+
+    let end;
+    if( endDate !==undefined) {
+        end = parseDate(endDate);
+        if (end === null) {
+            res.status(400).end();
+            return;
+        }
+    }
+
+
     const absenceController = await AbsenceController.getInstance();
     const absence = await absenceController.update({
         id,
-        start: new Date(start),
-        end: new Date(end),
+        start,
+        end,
         isValidated
     });
 
