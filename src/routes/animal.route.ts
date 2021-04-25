@@ -14,11 +14,11 @@ animalRouter.post("/", async function(req, res) {
     const animalController = await AnimalController.getInstance();
     const animal = await animalController.create({
         name, description, isInSpace
-    },Number.parseInt(space_id),Number.parseInt(species_id));
+    },Number.parseInt(space_id), Number.parseInt(species_id));
 
     if (animal !== null){
+        res.status(201);
         res.json(animal);
-        res.status(201).end();
     } else {
         res.status(409).end();
     }

@@ -38,7 +38,7 @@ export class AnimalController {
             return null;
         }
 
-        const species = await this.Space.findOne({
+        const species = await this.Species.findOne({
             where: {
                 id: speciesId
             }
