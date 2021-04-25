@@ -57,9 +57,7 @@ export class MediaController {
         const media = await MediaController.instance.getOne(props.id);
         if (media != null){
             return media.update(
-                {
-                    name: props.name
-                }
+                    props
             );
         }
         return null;

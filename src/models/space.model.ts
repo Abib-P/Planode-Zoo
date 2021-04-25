@@ -14,10 +14,10 @@ export interface SpaceProps {
     capacity: number;
     currentVisitor: number;
     handicapAccessibility: boolean;
-    openingDayTime: Date;
-    closingDayTime: Date;
-    openingNightTime: Date;
-    closingNightTime: Date;
+    openingDayTime: number;
+    closingDayTime: number;
+    openingNightTime: number;
+    closingNightTime: number;
     space_type_id?: number;
 }
 
@@ -50,16 +50,16 @@ export default function(sequelize: Sequelize): ModelCtor<SpaceInstance> {
             type: DataTypes.BOOLEAN
         },
         openingDayTime: {
-            type: DataTypes.DATE
+            type: DataTypes.BIGINT
         },
         closingDayTime: {
-            type: DataTypes.DATE
+            type: DataTypes.BIGINT
         },
         openingNightTime: {
-            type: DataTypes.DATE
+            type: DataTypes.BIGINT
         },
         closingNightTime: {
-            type: DataTypes.DATE
+            type: DataTypes.BIGINT
         },
         space_type_id: {
             type: DataTypes.BIGINT
