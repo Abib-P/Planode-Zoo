@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 
 import {buildRoutes} from "./src/routes";
 import {SequelizeManager} from "./src/models";
+import {parseDate} from "./src/utils/date.utils";
 
 const app: Express = express();
 
