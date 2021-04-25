@@ -79,7 +79,6 @@ export class MaintenanceController {
         const maintenance = await MaintenanceController.instance.getOne(props.id);
 
         if (maintenance != null){
-
             if (props.space_id != undefined){
                 space = await this.Space.findOne({
                     where: {
@@ -92,6 +91,7 @@ export class MaintenanceController {
                 }else{
                     await maintenance.setSpace(space);
                 }
+
             }
 
             if( !verifyDate(props.start !== undefined? props.start: maintenance.start,
