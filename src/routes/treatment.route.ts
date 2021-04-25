@@ -1,84 +1,90 @@
 import express from "express";
-import {SpeciesController} from "../controllers/species.controller";
+import {TreatmentController} from "../controllers/treatment.controller";
 
-const speciesRouter = express.Router();
+const treatmentRouter = express.Router();
 
-speciesRouter.post("/", async function(req, res) {
-    const {name, description} = req.body;
+treatmentRouter.post("/", async function(req, res) {
+    const {description, end, start, frequency, nextOccurrence} = req.body;
 
-    if (name === undefined || description === undefined ) {
+    if (description === undefined || end === undefined || start === undefined || frequency === undefined || nextOccurrence === undefined) {
         res.status(400).end();
         return;
     }
 
-    const speciesController = await SpeciesController.getInstance();
-    const species = await speciesController.create({
-        name,
-        description
+    const treatmentController = await TreatmentController.getInstance();
+    const treatment = await treatmentController.create({
+        description,
+        end,
+        start,
+        frequency,
+        nextOccurrence
     });
 
-    if (species !== null) {
-        res.json(species);
+    if (treatment !== null) {
+        res.json(treatment);
         res.status(201).end();
     } else {
         res.status(409).end();
     }
 });
 
-speciesRouter.get("/", async function(req, res){
-    const speciesController = await SpeciesController.getInstance();
-    const species = await speciesController.getAll();
+treatmentRouter.get("/", async function(req, res){
+    const treatmentController = await TreatmentController.getInstance();
+    const treatment = await treatmentController.getAll();
 
-    if (species != null) {
+    if (treatment != null) {
         res.status(200);
-        res.json(species);
+        res.json(treatment);
     } else {
         res.status(204).end();
     }
 });
 
-speciesRouter.get("/:id", async function (req, res) {
+treatmentRouter.get("/:id", async function (req, res) {
     const {id} = req.params;
-    const speciesController = await SpeciesController.getInstance();
-    const species = await speciesController.getOne(
+    const treatmentController = await TreatmentController.getInstance();
+    const treatment = await treatmentController.getOne(
         Number.parseInt(id)
     );
 
-    if (species === null){
+    if (treatment === null){
         res.status(404).end();
     } else {
         res.status(200);
-        res.json(species);
+        res.json(treatment);
     }
 });
 
-speciesRouter.put("/", async function (req, res){
-    const {id, name, description} = req.body;
+treatmentRouter.put("/", async function (req, res){
+    const {id, description, end, start, frequency, nextOccurrence} = req.body;
 
-    if (id === undefined || name === undefined){
+    if (id === undefined || description === undefined || end === undefined || start === undefined || frequency === undefined || nextOccurrence === undefined){
         res.status(400).end();
         return;
     }
 
-    const speciesController = await SpeciesController.getInstance();
-    const species = await speciesController.update({
+    const treatmentController = await TreatmentController.getInstance();
+    const treatment = await treatmentController.update({
         id,
-        name,
-        description
+        description,
+        end,
+        start,
+        frequency,
+        nextOccurrence
     });
 
-    if (species != null) {
+    if (treatment != null) {
         res.status(200);
-        res.json(species);
+        res.json(treatment);
     } else {
         res.status(400).end();
     }
 });
 
-speciesRouter.delete("/:id", async function (req, res){
+treatmentRouter.delete("/:id", async function (req, res){
     const {id} = req.params;
-    const speciesController = await SpeciesController.getInstance();
-    const affectedRows = await speciesController.delete(Number.parseInt(id));
+    const treatmentController = await TreatmentController.getInstance();
+    const affectedRows = await treatmentController.delete(Number.parseInt(id));
 
     if (affectedRows > 0){
         res.status(200).end();
@@ -88,5 +94,5 @@ speciesRouter.delete("/:id", async function (req, res){
 });
 
 export {
-    speciesRouter
+    treatmentRouter
 };

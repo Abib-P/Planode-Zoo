@@ -1,48 +1,48 @@
 import {ModelCtor} from "sequelize";
 import {SequelizeManager} from "../models";
-import {AnimalInstance} from "../models/animal.model";
+import {TreatmentCreationProps, TreatmentInstance, TreatmentProps} from "../models/treatment.model";
 
 
-export class AnimalController {
+export class TreatmentController {
 
-    Animal: ModelCtor<AnimalInstance>;
+    Treatment: ModelCtor<TreatmentInstance>;
 
-    private static instance: AnimalController;
+    private static instance: TreatmentController;
 
-    public static async getInstance(): Promise<AnimalController> {
-        if (AnimalController.instance === undefined) {
-            const {Animal} = await SequelizeManager.getInstance();
-            AnimalController.instance = new AnimalController(Animal);
+    public static async getInstance(): Promise<TreatmentController> {
+        if (TreatmentController.instance === undefined) {
+            const {Treatment} = await SequelizeManager.getInstance();
+            TreatmentController.instance = new TreatmentController(Treatment);
         }
-        return AnimalController.instance;
+        return TreatmentController.instance;
     }
 
-    private constructor(Animal: ModelCtor<AnimalInstance>) {
-        this.Animal = Animal;
+    private constructor(Treatment: ModelCtor<TreatmentInstance>) {
+        this.Treatment = Treatment;
     }
 
-    public async create(props: AnimalInstance): Promise<AnimalInstance | null> {
-        return this.Animal.create(props);
+    public async create(props: TreatmentCreationProps): Promise<TreatmentInstance | null> {
+        return this.Treatment.create(props);
     }
 
-    public async getOne(id: number): Promise<AnimalInstance | null> {
-        return this.Animal.findOne({
+    public async getOne(id: number): Promise<TreatmentInstance | null> {
+        return this.Treatment.findOne({
             where: {
                 id
             }
         });
     }
 
-    public async getAll(): Promise<AnimalInstance[] | null> {
-        return this.Animal.findAll();
+    public async getAll(): Promise<TreatmentInstance[] | null> {
+        return this.Treatment.findAll();
     }
 
-    public async update(props: AnimalInstance): Promise<AnimalInstance | null> {
-        const animal = await AnimalController.instance.getOne(props.id);
-        if (animal != null){
-            return animal.update(
+    public async update(props: TreatmentProps): Promise<TreatmentInstance | null> {
+        const treatment = await TreatmentController.instance.getOne(props.id);
+        if (treatment != null){
+            return treatment.update(
                 {
-                    name: props.name
+                    props
                 }
             );
         }
@@ -50,12 +50,12 @@ export class AnimalController {
     }
 
     public async delete(id: number): Promise<number> {
-        const animal = await AnimalController.instance.getOne(id);
-        if (animal != null){
-            return this.Animal.destroy(
+        const treatment = await TreatmentController.instance.getOne(id);
+        if (treatment != null){
+            return this.Treatment.destroy(
                 {
                     where: {
-                        id: animal.id
+                        id: treatment.id
                     }
                 }
             );

@@ -1,86 +1,84 @@
 import express from "express";
-import {AnimalController} from "../controllers/animal.controller";
+import {SpeciesController} from "../controllers/species.controller";
 
-const animalRouter = express.Router();
+const speciesRouter = express.Router();
 
-animalRouter.post("/", async function(req, res) {
-    const {name, description, isInSpace} = req.body;
+speciesRouter.post("/", async function(req, res) {
+    const {name, description} = req.body;
 
-    if (name === undefined || description === undefined || isInSpace === undefined) {
+    if (name === undefined || description === undefined ) {
         res.status(400).end();
         return;
     }
 
-    const animalController = await AnimalController.getInstance();
-    const animal = await animalController.create({
+    const speciesController = await SpeciesController.getInstance();
+    const species = await speciesController.create({
         name,
-        description,
-        isInSpace
+        description
     });
 
-    if (animal !== null) {
-        res.json(animal);
+    if (species !== null) {
+        res.json(species);
         res.status(201).end();
     } else {
         res.status(409).end();
     }
 });
 
-animalRouter.get("/", async function(req, res){
-    const animalController = await AnimalController.getInstance();
-    const animals = await animalController.getAll();
+speciesRouter.get("/", async function(req, res){
+    const speciesController = await SpeciesController.getInstance();
+    const species = await speciesController.getAll();
 
-    if (animals != null) {
+    if (species != null) {
         res.status(200);
-        res.json(animals);
+        res.json(species);
     } else {
         res.status(204).end();
     }
 });
 
-animalRouter.get("/:id", async function (req, res) {
+speciesRouter.get("/:id", async function (req, res) {
     const {id} = req.params;
-    const animalController = await AnimalController.getInstance();
-    const animal = await animalController.getOne(
+    const speciesController = await SpeciesController.getInstance();
+    const species = await speciesController.getOne(
         Number.parseInt(id)
     );
 
-    if (animal === null){
+    if (species === null){
         res.status(404).end();
     } else {
         res.status(200);
-        res.json(animal);
+        res.json(species);
     }
 });
 
-animalRouter.put("/", async function (req, res){
-    const {id, name, description, isInSpace} = req.body;
+speciesRouter.put("/", async function (req, res){
+    const {id, name, description} = req.body;
 
     if (id === undefined || name === undefined){
         res.status(400).end();
         return;
     }
 
-    const animalController = await AnimalController.getInstance();
-    const animal = await animalController.update({
+    const speciesController = await SpeciesController.getInstance();
+    const species = await speciesController.update({
         id,
         name,
-        description,
-        isInSpace
+        description
     });
 
-    if (animal != null) {
+    if (species != null) {
         res.status(200);
-        res.json(animal);
+        res.json(species);
     } else {
         res.status(400).end();
     }
 });
 
-animalRouter.delete("/:id", async function (req, res){
+speciesRouter.delete("/:id", async function (req, res){
     const {id} = req.params;
-    const animalController = await AnimalController.getInstance();
-    const affectedRows = await animalController.delete(Number.parseInt(id));
+    const speciesController = await SpeciesController.getInstance();
+    const affectedRows = await speciesController.delete(Number.parseInt(id));
 
     if (affectedRows > 0){
         res.status(200).end();
@@ -90,5 +88,5 @@ animalRouter.delete("/:id", async function (req, res){
 });
 
 export {
-    animalRouter
+    speciesRouter
 };
