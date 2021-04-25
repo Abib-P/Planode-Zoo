@@ -55,7 +55,7 @@ export class TreatmentController{
         let animal = null;
         if (animalId != undefined){
             isAnimalUpdate = true;
-            const animal = await this.Animal.findOne({
+            animal = await this.Animal.findOne({
                 where: {
                     id: animalId
                 }

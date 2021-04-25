@@ -12,7 +12,7 @@ export interface TreatmentProps {
     description: string;
     end: Date;
     start: Date;
-    frequency: Date | null;
+    frequency: number | null;
     nextOccurrence: Date;
     animal_id?: number;
 }
@@ -41,7 +41,7 @@ export default function(sequelize: Sequelize): ModelCtor<TreatmentInstance> {
             type: DataTypes.DATE
         },
         frequency: {
-            type: DataTypes.DATE
+            type: DataTypes.BIGINT
         },
         nextOccurrence: {
             type: DataTypes.DATE
