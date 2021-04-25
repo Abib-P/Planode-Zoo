@@ -13,8 +13,10 @@ import {clientPassRouter} from './clientPass.route';
 import {treatmentRouter} from './treatment.route';
 import {maintenanceRouter} from './maintenance.route';
 import {speciesRouter} from './species.route';
+import {visitRouter} from "./visit.route";
 import {animalRouter} from "./animal.route";
 import {spaceRouter} from "./space.route";
+
 
 export function buildRoutes(app: Express){
     app.use("/job", jobRouter);
@@ -31,6 +33,8 @@ export function buildRoutes(app: Express){
     app.use("/treatment", treatmentRouter);
     app.use("/maintenance", maintenanceRouter);
     app.use("/species", speciesRouter);
+    app.use("/visit", visitRouter);
     app.use("/animal", animalRouter);
     app.use("/space", spaceRouter);
+
 }

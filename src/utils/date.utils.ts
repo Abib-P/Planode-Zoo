@@ -8,8 +8,10 @@ export function parseDate(dateString: string) {
         const date = Number(str[0]);
 
         return new Date(year, month, date);
+    }else{
+        return null;
     }
-    const timestamp = Date.parse(dateString);
-    return isNaN(timestamp) ? null : new Date(timestamp);
+    //const timestamp = Date.parse(dateString);
+    //return isNaN(timestamp) ? null : new Date(timestamp);
 
 }
