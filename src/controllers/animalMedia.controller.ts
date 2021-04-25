@@ -105,8 +105,8 @@ export class AnimalMediaController {
             return null;
         }
 
-        await animalMedia.setAnimal(animal);
-        await animalMedia.setMedia(media);
+        await animalMedia.update(props);
+
         return animalMedia;
     }
 

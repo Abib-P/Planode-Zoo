@@ -105,8 +105,8 @@ export class SpaceMediaController {
             return null;
         }
 
-        await spaceMedia.setSpace(space);
-        await spaceMedia.setMedia(media);
+        await spaceMedia.update(props);
+
         return spaceMedia;
     }
 
