@@ -38,15 +38,15 @@ export class SpeciesController {
 
     public async update(props: SpeciesProps): Promise<SpeciesInstance | null> {
         const treatment = await SpeciesController.instance.getOne(props.id);
-        if (treatment != null){
-            return treatment.update( props );
+        if (treatment != null) {
+            return treatment.update(props);
         }
         return null;
     }
 
     public async delete(id: number): Promise<number> {
         const treatment = await SpeciesController.instance.getOne(id);
-        if (treatment != null){
+        if (treatment != null) {
             return this.Species.destroy(
                 {
                     where: {

@@ -1,4 +1,4 @@
-import {ModelCtor, where} from "sequelize";
+import {ModelCtor} from "sequelize";
 import {MediaCreationProps, MediaInstance, MediaProps} from "../models/media.model";
 import {SequelizeManager} from "../models";
 import {MediaTypeInstance} from "../models/mediaType.model";
@@ -27,14 +27,14 @@ export class MediaController {
     public async create(props: MediaCreationProps, mediaTypeId: number): Promise<MediaInstance | null> {
 
         const mediaType = await this.MediaType.findOne({
-            where:{
-                id:mediaTypeId
+            where: {
+                id: mediaTypeId
             }
         });
 
-        if(mediaType === null){
+        if (mediaType === null) {
             return null;
-        }else{
+        } else {
             let media = await this.Media.create(props);
             media.setMediaType(mediaType);
             return media;
@@ -55,9 +55,9 @@ export class MediaController {
 
     public async update(props: MediaProps): Promise<MediaInstance | null> {
         const media = await MediaController.instance.getOne(props.id);
-        if (media != null){
+        if (media != null) {
             return media.update(
-                    props
+                props
             );
         }
         return null;
@@ -65,7 +65,7 @@ export class MediaController {
 
     public async delete(id: number): Promise<number> {
         const media = await MediaController.instance.getOne(id);
-        if (media != null){
+        if (media != null) {
             return this.Media.destroy(
                 {
                     where: {

@@ -1,5 +1,5 @@
 import {ModelCtor} from "sequelize";
-import {SpaceCreationProps, SpaceInstance, SpaceProps, SpaceUpdateProps} from "../models/space.model";
+import {SpaceCreationProps, SpaceInstance, SpaceUpdateProps} from "../models/space.model";
 import {SpaceTypeInstance} from "../models/spaceType.model";
 import {SequelizeManager} from "../models";
 
@@ -10,8 +10,8 @@ export class SpaceController {
 
     private static instance: SpaceController;
 
-    public static async getInstance(): Promise<SpaceController>{
-        if (SpaceController.instance === undefined){
+    public static async getInstance(): Promise<SpaceController> {
+        if (SpaceController.instance === undefined) {
             const {Space, SpaceType} = await SequelizeManager.getInstance();
             SpaceController.instance = new SpaceController(Space, SpaceType);
         }
@@ -23,45 +23,40 @@ export class SpaceController {
         this.SpaceType = SpaceType;
     }
 
-    public async create(props: SpaceCreationProps, spaceTypeId: number): Promise<SpaceInstance | null>{
+    public async create(props: SpaceCreationProps, spaceTypeId: number): Promise<SpaceInstance | null> {
 
         const spaceType = await this.SpaceType.findOne({
             where: {
                 id: spaceTypeId
             }
         });
-
-        if (spaceType === null){
-            console.log("fuck 10");
+        if (spaceType === null) {
             return null;
         } else {
 
-            if(props.endTime != undefined && props.startTime > props.endTime){
-                console.log("fuck 11");
+            if (props.endTime != undefined && props.startTime > props.endTime) {
                 return null;
             }
 
-            if (this.verifyOpeningDayTimeTable(props.openingDayTime, props.closingDayTime)){
-                console.log("fuck 12");
+            if (this.verifyOpeningDayTimeTable(props.openingDayTime, props.closingDayTime)) {
                 return null;
             }
 
-            if (this.verifyOpeningNightTimeTable(props.openingDayTime, props.closingDayTime, props.openingNightTime, props.closingNightTime) ){
-                console.log("fuck 13");
+            if (this.verifyOpeningNightTimeTable(props.openingDayTime, props.closingDayTime, props.openingNightTime, props.closingNightTime)) {
                 return null;
             }
 
-            const space = await this.Space.create( props );
-            if (space != null){
+            const space = await this.Space.create(props);
+            if (space != null) {
                 space.setSpaceType(spaceType);
                 return space;
             }
         }
-        console.log("fuck 14");
+
         return null;
     }
 
-    public async getOne(id: number): Promise<SpaceInstance | null>{
+    public async getOne(id: number): Promise<SpaceInstance | null> {
         return this.Space.findOne({
             where: {
                 id
@@ -69,64 +64,61 @@ export class SpaceController {
         });
     }
 
-    public async getAll(): Promise<SpaceInstance[] | null>{
+    public async getAll(): Promise<SpaceInstance[] | null> {
         return this.Space.findAll();
     }
 
-    public async update(props: SpaceUpdateProps, spaceTypeId: number): Promise<SpaceInstance | null>{
-        let isSpaceTypeUpdate ;
+    public async update(props: SpaceUpdateProps, spaceTypeId: number): Promise<SpaceInstance | null> {
+        let isSpaceTypeUpdate;
         let spaceType = null;
 
-        if( props.space_type_id != undefined){
+        if (props.space_type_id != undefined) {
             spaceType = await this.SpaceType.findOne({
                 where: {
                     id: spaceTypeId
                 }
             });
-            if (spaceType === null){
+            if (spaceType === null) {
                 return null;
             }
         }
 
         const space = await SpaceController.instance.getOne(props.id);
 
-        if (space != null){
+        if (space != null) {
 
-            if( props.endTime !== undefined || space.endTime !== undefined ){
+            if (props.endTime !== undefined || space.endTime !== undefined) {
                 let d: Date;
 
-                if( props.endTime !== undefined){
+                if (props.endTime !== undefined) {
                     d = props.endTime;
-                }else if(space.endTime !==undefined){
+                } else if (space.endTime !== undefined) {
                     d = space.endTime;
-                }else{
+                } else {
                     d = new Date();
                     console.log("SUCE MOI"); //TODO rename
                 }
 
-                if(!this.verifyDate(props.startTime !== undefined? props.startTime: space.startTime,
-                                    d))
-                {
+                if (!this.verifyDate(props.startTime !== undefined ? props.startTime : space.startTime,
+                    d)) {
                     return null;
                 }
             }
 
-            if (this.verifyOpeningDayTimeTable(props.openingDayTime !== undefined? props.openingDayTime: space.openingDayTime,
-                                                props.closingDayTime !== undefined? props.closingDayTime: space.closingDayTime))
-            {
+            if (this.verifyOpeningDayTimeTable(props.openingDayTime !== undefined ? props.openingDayTime : space.openingDayTime,
+                props.closingDayTime !== undefined ? props.closingDayTime : space.closingDayTime)) {
                 return null;
             }
 
-            if (this.verifyOpeningNightTimeTable(props.openingDayTime !== undefined? props.openingDayTime: space.openingDayTime,
-                                                  props.closingDayTime !== undefined? props.closingDayTime: space.closingDayTime,
-                                                props.openingNightTime !== undefined? props.openingNightTime: space.openingNightTime,
-                                                 props.closingNightTime !== undefined? props.closingNightTime: space.closingNightTime) )
-            {
+            if (this.verifyOpeningNightTimeTable(props.openingDayTime !== undefined ? props.openingDayTime : space.openingDayTime,
+                props.closingDayTime !== undefined ? props.closingDayTime : space.closingDayTime,
+                props.openingNightTime !== undefined ? props.openingNightTime : space.openingNightTime,
+                props.closingNightTime !== undefined ? props.closingNightTime : space.closingNightTime)) {
                 return null;
             }
 
             await space.update(props);
-            if (isSpaceTypeUpdate && spaceType != null){
+            if (isSpaceTypeUpdate && spaceType != null) {
                 await space.setSpaceType(spaceType);
             }
             return space;
@@ -134,9 +126,9 @@ export class SpaceController {
         return null;
     }
 
-    public async delete(id: number): Promise<number>{
+    public async delete(id: number): Promise<number> {
         const space = await SpaceController.instance.getOne(id);
-        if (space != null){
+        if (space != null) {
             return this.Space.destroy({
                 where: {
                     id: space.id
@@ -146,18 +138,18 @@ export class SpaceController {
         return 0;
     }
 
-    private verifyDate(startDate: Date, endDate: Date): boolean{
+    private verifyDate(startDate: Date, endDate: Date): boolean {
         return startDate <= endDate;
     }
 
-    private verifyOpeningDayTimeTable(openingDayTime: number, closingDayTime: number): boolean{
+    private verifyOpeningDayTimeTable(openingDayTime: number, closingDayTime: number): boolean {
         return openingDayTime != undefined && closingDayTime != undefined && openingDayTime > closingDayTime;
     }
 
     private verifyOpeningNightTimeTable(
         openingDayTime: number, closingDayTime: number,
         openingNightTime: number, closingNightTime: number
-    ){
+    ) {
         return openingNightTime != undefined && closingNightTime != undefined &&
             openingDayTime != undefined && closingDayTime != undefined &&
             (openingNightTime < closingDayTime || closingNightTime > openingDayTime);

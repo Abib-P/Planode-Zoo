@@ -1,17 +1,17 @@
-import {ModelCtor, where} from "sequelize";
+import {ModelCtor} from "sequelize";
 import {ClientPassCreationProps, ClientPassInstance, ClientPassProps} from "../models/clientPass.model";
 import {ClientInstance} from "../models/client.model";
 import {PassInstance} from "../models/pass.model";
 import {SequelizeManager} from "../models";
 
-export class ClientPassController{
+export class ClientPassController {
     ClientPass: ModelCtor<ClientPassInstance>;
     Client: ModelCtor<ClientInstance>;
     Pass: ModelCtor<PassInstance>;
 
     private static instance: ClientPassController;
 
-    public static async getInstance(): Promise<ClientPassController>{
+    public static async getInstance(): Promise<ClientPassController> {
         if (ClientPassController.instance === undefined) {
             const {ClientPass, Client, Pass} = await SequelizeManager.getInstance();
             ClientPassController.instance = new ClientPassController(ClientPass, Client, Pass);
@@ -25,7 +25,7 @@ export class ClientPassController{
         this.Pass = Pass;
     }
 
-    public async create(props: ClientPassCreationProps, clientId: number, passId: number): Promise<ClientPassInstance | null>{
+    public async create(props: ClientPassCreationProps, clientId: number, passId: number): Promise<ClientPassInstance | null> {
 
         const client = await this.Client.findOne({
             where: {
@@ -41,12 +41,12 @@ export class ClientPassController{
                 id: passId
             }
         });
-        if (pass === null){
+        if (pass === null) {
             return null;
         }
 
-        let clientPass = await this.ClientPass.create( props );
-        if (clientPass === null){
+        let clientPass = await this.ClientPass.create(props);
+        if (clientPass === null) {
             return null;
         } else {
             clientPass.setClient(client);
@@ -55,11 +55,11 @@ export class ClientPassController{
         }
     }
 
-    public async getAll(): Promise<ClientPassInstance[] |null>{
+    public async getAll(): Promise<ClientPassInstance[] | null> {
         return this.ClientPass.findAll();
     }
 
-    public async getOne(id: number): Promise<ClientPassInstance | null>{
+    public async getOne(id: number): Promise<ClientPassInstance | null> {
         return this.ClientPass.findOne({
             where: {
                 id
@@ -67,7 +67,7 @@ export class ClientPassController{
         });
     }
 
-    public async getAllToClient(clientId: number): Promise<ClientPassInstance[] | null >{
+    public async getAllToClient(clientId: number): Promise<ClientPassInstance[] | null> {
         return this.ClientPass.findAll({
             where: {
                 client_id: clientId
@@ -75,7 +75,7 @@ export class ClientPassController{
         });
     }
 
-    public async update(props: ClientPassProps, clientId: number, passId: number): Promise<ClientPassInstance | null>{
+    public async update(props: ClientPassProps, clientId: number, passId: number): Promise<ClientPassInstance | null> {
 
         const client = await this.Client.findOne({
             where: {
@@ -91,12 +91,12 @@ export class ClientPassController{
                 id: passId
             }
         });
-        if (pass === null){
+        if (pass === null) {
             return null;
         }
 
-        let clientPass = await ClientPassController.instance.getOne( props.id );
-        if (clientPass === null){
+        let clientPass = await ClientPassController.instance.getOne(props.id);
+        if (clientPass === null) {
             return null;
         } else {
             await clientPass.setClient(client);
@@ -105,9 +105,9 @@ export class ClientPassController{
         }
     }
 
-    public async delete(id: number): Promise<number>{
-        const clientPass = await ClientPassController.instance.getOne( id );
-        if (clientPass != null){
+    public async delete(id: number): Promise<number> {
+        const clientPass = await ClientPassController.instance.getOne(id);
+        if (clientPass != null) {
             return this.ClientPass.destroy({
                 where: {
                     id: clientPass.id

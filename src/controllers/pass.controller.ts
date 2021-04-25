@@ -35,27 +35,27 @@ export class PassController {
         return this.Pass.findAll();
     }
 
-    public async create(props: PassCreationProps, escapeGameId: number):  Promise<PassInstance | null> {
+    public async create(props: PassCreationProps, escapeGameId: number): Promise<PassInstance | null> {
         let isPassEscape;
         let escapeGame = null;
-        if (escapeGameId != undefined){
+        if (escapeGameId != undefined) {
             isPassEscape = true;
             escapeGame = await this.EscapeGame.findOne({
                 where: {
                     id: escapeGameId
                 }
             });
-            if (escapeGame === null){
+            if (escapeGame === null) {
                 return null;
             }
         }
 
-        let pass = await this.Pass.create( props );
-        if (pass === null){
+        let pass = await this.Pass.create(props);
+        if (pass === null) {
             return null;
         }
 
-        if (isPassEscape && escapeGame !== null){
+        if (isPassEscape && escapeGame !== null) {
             pass.setEscapeGame(escapeGame);
         }
 
@@ -65,21 +65,21 @@ export class PassController {
     public async update(props: PassProps, escapeGameId: number): Promise<PassInstance | null> {
         let isPassEscape;
         let escapeGame = null;
-        if (escapeGameId != undefined){
+        if (escapeGameId != undefined) {
             isPassEscape = true;
             escapeGame = await this.EscapeGame.findOne({
                 where: {
                     id: escapeGameId
                 }
             });
-            if (escapeGame === null){
+            if (escapeGame === null) {
                 return null;
             }
         }
         const Pass = await PassController.instance.getOne(props.id);
-        if (Pass != null){
+        if (Pass != null) {
             await Pass.update(props);
-            if (isPassEscape && escapeGame != null){
+            if (isPassEscape && escapeGame != null) {
                 await Pass.setEscapeGame(escapeGame);
             }
             return Pass;
@@ -89,7 +89,7 @@ export class PassController {
 
     public async delete(id: number): Promise<number> {
         const Pass = await PassController.instance.getOne(id);
-        if (Pass != null){
+        if (Pass != null) {
             return this.Pass.destroy(
                 {
                     where: {

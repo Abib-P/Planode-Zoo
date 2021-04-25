@@ -11,7 +11,7 @@ export async function authEmployeeMiddleware(req: express.Request,
         const authEmployeeController = await AuthEmployeeController.getInstance();
         const session = await authEmployeeController.getSession(token);
 
-        if ( session !== null ){
+        if (session !== null) {
             next();
             return;
         } else {
@@ -33,7 +33,7 @@ export async function securityRegisterEmployee(req: express.Request,
         const authEmployeeController = await AuthEmployeeController.getInstance();
         const session = await authEmployeeController.getSession(token);
 
-        if (session !== null){
+        if (session !== null) {
 
             const employee = session.getEmployee;
 

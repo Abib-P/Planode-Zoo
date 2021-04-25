@@ -39,7 +39,7 @@ export class MediaTypeController {
 
     public async update(props: MediaTypeProps): Promise<MediaTypeInstance | null> {
         const mediaType = await MediaTypeController.instance.getOne(props.id);
-        if (mediaType != null){
+        if (mediaType != null) {
             return mediaType.update(
                 {
                     name: props.name
@@ -51,7 +51,7 @@ export class MediaTypeController {
 
     public async delete(id: number): Promise<number> {
         const mediaType = await MediaTypeController.instance.getOne(id);
-        if (mediaType != null){
+        if (mediaType != null) {
             return this.MediaType.destroy(
                 {
                     where: {

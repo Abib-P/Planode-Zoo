@@ -2,7 +2,6 @@ import {ModelCtor} from "sequelize";
 import {SequelizeManager} from "../models";
 import {EscapeGameCreationProps, EscapeGameInstance, EscapeGameProps} from "../models/escapeGame.model";
 
-
 export class EscapeGameController {
 
     EscapeGame: ModelCtor<EscapeGameInstance>;
@@ -39,7 +38,7 @@ export class EscapeGameController {
 
     public async update(props: EscapeGameProps): Promise<EscapeGameInstance | null> {
         const escapeGame = await EscapeGameController.instance.getOne(props.id);
-        if (escapeGame != null){
+        if (escapeGame != null) {
             return escapeGame.update(
                 props
             );
@@ -49,7 +48,7 @@ export class EscapeGameController {
 
     public async delete(id: number): Promise<number> {
         const escapeGame = await EscapeGameController.instance.getOne(id);
-        if (escapeGame != null){
+        if (escapeGame != null) {
             return this.EscapeGame.destroy(
                 {
                     where: {

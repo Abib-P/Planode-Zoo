@@ -30,23 +30,23 @@ export class VisitController {
     public async create(props: VisitCreationProps, clientPassId: number, spaceId: number): Promise<VisitInstance | null> {
 
         const space = await this.Space.findOne({
-            where:{
-                id:spaceId
+            where: {
+                id: spaceId
             }
         });
 
-        if( space === null){
-            return  null;
+        if (space === null) {
+            return null;
         }
 
         const clientPass = await this.ClientPass.findOne({
-            where:{
-                id:clientPassId
+            where: {
+                id: clientPassId
             }
         });
 
-        if( clientPass === null){
-            return  null;
+        if (clientPass === null) {
+            return null;
         }
 
         let visit = await this.Visit.create(props);
@@ -57,12 +57,12 @@ export class VisitController {
 
     public async getAll(space_id: number | undefined, visitDate: Date | undefined): Promise<VisitInstance[] | null> {
 
-        if( space_id !== undefined){
+        if (space_id !== undefined) {
 
-            if( visitDate !== undefined){
+            if (visitDate !== undefined) {
 
                 let endDate = new Date(visitDate);
-                endDate.setDate(endDate.getDate()+1);
+                endDate.setDate(endDate.getDate() + 1);
 
                 return this.Visit.findAll({
                     where: {
@@ -73,7 +73,7 @@ export class VisitController {
                         }
                     }
                 });
-            }else{
+            } else {
                 return this.Visit.findAll({
                     where: {
                         space_id
@@ -81,10 +81,10 @@ export class VisitController {
                 });
             }
 
-        }else if( visitDate !== undefined){
+        } else if (visitDate !== undefined) {
 
             let endDate = new Date(visitDate);
-            endDate.setDate(endDate.getDate()+1);
+            endDate.setDate(endDate.getDate() + 1);
 
             return this.Visit.findAll({
                 where: {
@@ -94,7 +94,7 @@ export class VisitController {
                     }
                 }
             });
-        }else{
+        } else {
             return this.Visit.findAll();
         }
 
@@ -110,7 +110,7 @@ export class VisitController {
 
     public async update(props: VisitProps): Promise<VisitInstance | null> {
 
-        if( props.space_id !== undefined) {
+        if (props.space_id !== undefined) {
             const space = await this.Space.findOne({
                 where: {
                     id: props.space_id
@@ -122,7 +122,7 @@ export class VisitController {
             }
         }
 
-        if( props.client_pass_id !== undefined) {
+        if (props.client_pass_id !== undefined) {
             const clientPass = await this.ClientPass.findOne({
                 where: {
                     id: props.client_pass_id
@@ -135,7 +135,7 @@ export class VisitController {
         }
 
         const visit = await VisitController.instance.getOne(props.id);
-        if (visit != null){
+        if (visit != null) {
             return visit.update(
                 props
             );
@@ -145,7 +145,7 @@ export class VisitController {
 
     public async delete(id: number): Promise<number> {
         const visit = await VisitController.instance.getOne(id);
-        if (visit != null){
+        if (visit != null) {
             return this.Visit.destroy(
                 {
                     where: {

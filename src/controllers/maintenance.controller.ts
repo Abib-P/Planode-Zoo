@@ -1,4 +1,4 @@
-import {ModelCtor, where} from "sequelize";
+import {ModelCtor} from "sequelize";
 import {MaintenanceCreationProps, MaintenanceInstance, MaintenanceProps} from "../models/maintenance.model";
 import {SpaceInstance} from "../models/space.model";
 import {SequelizeManager} from "../models";
@@ -11,8 +11,8 @@ export class MaintenanceController {
 
     private static instance: MaintenanceController;
 
-    public static async getInstance(): Promise<MaintenanceController>{
-        if (MaintenanceController.instance === undefined){
+    public static async getInstance(): Promise<MaintenanceController> {
+        if (MaintenanceController.instance === undefined) {
             const {Maintenance, Space} = await SequelizeManager.getInstance();
             MaintenanceController.instance = new MaintenanceController(Maintenance, Space);
         }
@@ -27,7 +27,6 @@ export class MaintenanceController {
     public async create(props: MaintenanceCreationProps, spaceId: number): Promise<MaintenanceInstance | null>{
 
         if( props.start > props.end){
-            console.log("fuck 1");
             return null;
         }
 
@@ -38,7 +37,6 @@ export class MaintenanceController {
         });
 
         if (space === null){
-            console.log("fuck 2");
             return null;
         }
 
@@ -47,12 +45,11 @@ export class MaintenanceController {
             maintenance.setSpace(space);
             return maintenance;
         }else{
-            console.log("fuck 3");
             return null;
         }
     }
 
-    public async getOne(id: number): Promise<MaintenanceInstance | null>{
+    public async getOne(id: number): Promise<MaintenanceInstance | null> {
         return this.Maintenance.findOne({
             where: {
                 id

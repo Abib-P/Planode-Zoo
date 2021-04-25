@@ -35,9 +35,9 @@ export class ClientController {
 
     public async update(props: ClientProps): Promise<ClientInstance | null> {
         const Client = await ClientController.instance.getOne(props.id);
-        if (Client != null){
+        if (Client != null) {
 
-            if (props.password != undefined){
+            if (props.password != undefined) {
                 props.password = await hash(props.password, 5);
             }
             return Client.update(
@@ -49,7 +49,7 @@ export class ClientController {
 
     public async delete(id: number): Promise<number> {
         const client = await ClientController.instance.getOne(id);
-        if (client != null){
+        if (client != null) {
             return this.Client.destroy(
                 {
                     where: {

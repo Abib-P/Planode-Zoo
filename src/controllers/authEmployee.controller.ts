@@ -2,7 +2,6 @@ import {ModelCtor} from "sequelize";
 import {EmployeeCreationProps, EmployeeInstance} from "../models/employee.model";
 import {SessionInstance} from "../models/session.model";
 import {SequelizeManager} from "../models";
-import {AuthClientController} from "./authClient.controller";
 import {compare, hash} from "bcrypt";
 import {JobInstance} from "../models/job.model";
 
@@ -64,10 +63,10 @@ export class AuthEmployeeController {
             return null;
         }
         const isSamePassword = await compare(password, employee.password);
-        if(!isSamePassword) {
+        if (!isSamePassword) {
             return null;
         }
-        const token = await hash( Date.now() + login, 5);
+        const token = await hash(Date.now() + login, 5);
         const session = await this.Session.create({
             token
         });

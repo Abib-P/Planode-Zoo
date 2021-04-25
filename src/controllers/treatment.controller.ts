@@ -3,15 +3,15 @@ import {TreatmentCreationProps, TreatmentInstance, TreatmentProps} from "../mode
 import {AnimalInstance} from "../models/animal.model";
 import {SequelizeManager} from "../models";
 
-export class TreatmentController{
+export class TreatmentController {
 
     Treatment: ModelCtor<TreatmentInstance>;
     Animal: ModelCtor<AnimalInstance>;
 
     private static instance: TreatmentController;
 
-    public static async getInstance(): Promise<TreatmentController>{
-        if (TreatmentController.instance === undefined){
+    public static async getInstance(): Promise<TreatmentController> {
+        if (TreatmentController.instance === undefined) {
             const {Treatment, Animal} = await SequelizeManager.getInstance();
             TreatmentController.instance = new TreatmentController(Treatment, Animal);
         }
@@ -23,22 +23,22 @@ export class TreatmentController{
         this.Animal = Animal;
     }
 
-    public async create(props: TreatmentCreationProps, animalId: number): Promise<TreatmentInstance | null>{
+    public async create(props: TreatmentCreationProps, animalId: number): Promise<TreatmentInstance | null> {
         const animal = await this.Animal.findOne({
             where: {
                 id: animalId
             }
         });
-        if (animal === null){
+        if (animal === null) {
             return null;
         } else {
-            const treatment = await this.Treatment.create( props );
+            const treatment = await this.Treatment.create(props);
             treatment.set(animal);
             return treatment;
         }
     }
 
-    public async getOne(id: number): Promise<TreatmentInstance | null>{
+    public async getOne(id: number): Promise<TreatmentInstance | null> {
         return this.Treatment.findOne({
             where: {
                 id
@@ -46,29 +46,29 @@ export class TreatmentController{
         })
     }
 
-    public async getAll(): Promise<TreatmentInstance[] | null >{
+    public async getAll(): Promise<TreatmentInstance[] | null> {
         return this.Treatment.findAll();
     }
 
-    public async update(props: TreatmentProps, animalId: number): Promise<TreatmentInstance | null>{
-        let isAnimalUpdate ;
+    public async update(props: TreatmentProps, animalId: number): Promise<TreatmentInstance | null> {
+        let isAnimalUpdate;
         let animal = null;
-        if (animalId != undefined){
+        if (animalId != undefined) {
             isAnimalUpdate = true;
             animal = await this.Animal.findOne({
                 where: {
                     id: animalId
                 }
             });
-            if (animal === null){
+            if (animal === null) {
                 return null;
             }
         }
 
-        const treatment = await TreatmentController.instance.getOne( props.id );
-        if (treatment != null){
+        const treatment = await TreatmentController.instance.getOne(props.id);
+        if (treatment != null) {
             await treatment.update(props);
-            if (isAnimalUpdate && animal != null){
+            if (isAnimalUpdate && animal != null) {
                 await treatment.set(animal);
             }
             return treatment;
@@ -76,9 +76,9 @@ export class TreatmentController{
         return null;
     }
 
-    public async delete(id: number): Promise<number>{
+    public async delete(id: number): Promise<number> {
         const treatment = await TreatmentController.instance.getOne(id);
-        if (treatment != null){
+        if (treatment != null) {
             return this.Treatment.destroy({
                 where: {
                     id: treatment.id

@@ -1,4 +1,4 @@
-import Sequelize, {ModelCtor} from "sequelize";
+import {ModelCtor} from "sequelize";
 import {ClientCreationProps, ClientInstance} from "../models/client.model";
 import {SequelizeManager} from "../models";
 import {hash, compare} from "bcrypt";

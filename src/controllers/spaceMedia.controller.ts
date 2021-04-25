@@ -12,8 +12,8 @@ export class SpaceMediaController {
 
     private static instance: SpaceMediaController;
 
-    public static async getInstance(): Promise<SpaceMediaController>{
-        if (SpaceMediaController.instance === undefined){
+    public static async getInstance(): Promise<SpaceMediaController> {
+        if (SpaceMediaController.instance === undefined) {
             const {SpaceMedia, Space, Media} = await SequelizeManager.getInstance();
             SpaceMediaController.instance = new SpaceMediaController(SpaceMedia, Space, Media);
         }
@@ -26,13 +26,13 @@ export class SpaceMediaController {
         this.Media = Media;
     }
 
-    public async create(props: SpaceMediaCreationProps): Promise<SpaceMediaInstance | null>{
+    public async create(props: SpaceMediaCreationProps): Promise<SpaceMediaInstance | null> {
         const space = await this.Space.findOne({
             where: {
                 id: props.space_id
             }
         });
-        if (space === null){
+        if (space === null) {
             return null;
         }
 
@@ -41,12 +41,12 @@ export class SpaceMediaController {
                 id: props.media_id
             }
         });
-        if (media === null){
+        if (media === null) {
             return null;
         }
 
         const spaceMedia = await this.SpaceMedia.create();
-        if (spaceMedia != null){
+        if (spaceMedia != null) {
             spaceMedia.setSpace(space);
             spaceMedia.setMedia(media);
             return spaceMedia;
@@ -55,7 +55,7 @@ export class SpaceMediaController {
         }
     }
 
-    public async getOne(space_id: number, media_id: number): Promise<SpaceMediaInstance[] | null >{
+    public async getOne(space_id: number, media_id: number): Promise<SpaceMediaInstance[] | null> {
         return this.SpaceMedia.findAll({
             where: {
                 media_id,
@@ -64,11 +64,11 @@ export class SpaceMediaController {
         });
     }
 
-    public async getAll(): Promise<SpaceMediaInstance[] | null>{
+    public async getAll(): Promise<SpaceMediaInstance[] | null> {
         return this.SpaceMedia.findAll();
     }
 
-    public async getAllMediaForOneSpace(space_id: number): Promise<SpaceMediaInstance[] | null>{
+    public async getAllMediaForOneSpace(space_id: number): Promise<SpaceMediaInstance[] | null> {
         return this.SpaceMedia.findAll({
             where: {
                 space_id
@@ -76,13 +76,13 @@ export class SpaceMediaController {
         });
     }
 
-    public async update(props: SpaceMediaProps): Promise<SpaceMediaInstance | null>{
+    public async update(props: SpaceMediaProps): Promise<SpaceMediaInstance | null> {
         const space = await this.Space.findOne({
             where: {
                 id: props.space_id
             }
         });
-        if (space === null){
+        if (space === null) {
             return null;
         }
 
@@ -91,7 +91,7 @@ export class SpaceMediaController {
                 id: props.media_id
             }
         });
-        if (media === null){
+        if (media === null) {
             return null;
         }
 
@@ -100,7 +100,7 @@ export class SpaceMediaController {
                 id: props.id
             }
         });
-        if (spaceMedia === null){
+        if (spaceMedia === null) {
             return null;
         }
 
@@ -109,13 +109,13 @@ export class SpaceMediaController {
         return spaceMedia;
     }
 
-    public async delete(id: number): Promise<number>{
+    public async delete(id: number): Promise<number> {
         const spaceMedia = await this.SpaceMedia.findOne({
             where: {
                 id
             }
         });
-        if (spaceMedia != null){
+        if (spaceMedia != null) {
             return this.SpaceMedia.destroy({
                     where: {
                         id: spaceMedia.id

@@ -47,7 +47,7 @@ export class SpaceTypeController {
 
     public async update(props: SpaceTypeProps): Promise<SpaceTypeInstance | null> {
         const spaceType = await SpaceTypeController.instance.getOne(props.id);
-        if (spaceType != null){
+        if (spaceType != null) {
             return spaceType.update(
                 {
                     name: props.name,
@@ -60,7 +60,7 @@ export class SpaceTypeController {
 
     public async delete(id: number): Promise<number> {
         const spaceType = await SpaceTypeController.instance.getOne(id);
-        if (spaceType != null){
+        if (spaceType != null) {
             return this.SpaceType.destroy(
                 {
                     where: {
