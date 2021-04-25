@@ -1,15 +1,29 @@
 import express from "express";
 import {MaintenanceController} from "../controllers/maintenance.controller";
+import {parseDate} from "../utils/date.utils";
 
 const maintenanceRouter = express.Router();
 
 maintenanceRouter.post("/", async function(req, res){
-    const {description, end, start, space_id} = req.body;
+    const {description, startDate, endDate, space_id} = req.body;
 
     if (description === undefined ||
-        start === undefined ||
+        startDate === undefined ||
+        endDate === undefined ||
         space_id === undefined
     ){
+        res.status(400).end();
+        return;
+    }
+
+    const start = parseDate(startDate);
+    if (start === null){
+        res.status(400).end();
+        return;
+    }
+
+    const end = parseDate(endDate);
+    if (end === null){
         res.status(400).end();
         return;
     }
@@ -17,8 +31,8 @@ maintenanceRouter.post("/", async function(req, res){
     const maintenanceController = await MaintenanceController.getInstance();
     const maintenance = await maintenanceController.create({
         description,
-        start: new Date(start),
-        end: new Date(end),
+        start,
+        end,
     }, space_id);
 
     if (maintenance != null){
@@ -32,7 +46,8 @@ maintenanceRouter.post("/", async function(req, res){
 
 maintenanceRouter.get("/", async function (req, res){
     const maintenanceController = await MaintenanceController.getInstance();
-    const maintenances = await maintenanceController.getAll();
+    const {startDate, endDate, space_id} = req.body;
+    const maintenances = await maintenanceController.getAll(space_id);
 
     if (maintenances != null){
         res.status(200);
@@ -56,9 +71,21 @@ maintenanceRouter.get("/:id", async function (req, res){
 });
 
 maintenanceRouter.put("/", async function(req, res){
-    const {id, description, end, start, space_id} = req.body;
+    const {id, description, endDate, startDate, space_id} = req.body;
 
     if (id === undefined){
+        res.status(400).end();
+        return;
+    }
+
+    const start = parseDate(startDate);
+    if (start === null){
+        res.status(400).end();
+        return;
+    }
+
+    const end = parseDate(endDate);
+    if (end === null){
         res.status(400).end();
         return;
     }
@@ -67,9 +94,10 @@ maintenanceRouter.put("/", async function(req, res){
     const maintenance = await maintenanceController.update({
         id,
         description,
-        start: new Date(start),
-        end: new Date(end)
-    }, space_id);
+        start,
+        end,
+        space_id
+    });
 
     if (maintenance != null){
         res.status(200);

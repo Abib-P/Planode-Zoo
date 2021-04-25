@@ -30,19 +30,24 @@ export class SpaceController {
                 id: spaceTypeId
             }
         });
+
         if (spaceType === null){
+            console.log("fuck 10");
             return null;
         } else {
 
             if(props.endTime != undefined && props.startTime > props.endTime){
+                console.log("fuck 11");
                 return null;
             }
 
             if (this.verifyOpeningDayTimeTable(props.openingDayTime, props.closingDayTime)){
+                console.log("fuck 12");
                 return null;
             }
 
             if (this.verifyOpeningNightTimeTable(props.openingDayTime, props.closingDayTime, props.openingNightTime, props.closingNightTime) ){
+                console.log("fuck 13");
                 return null;
             }
 
@@ -52,7 +57,7 @@ export class SpaceController {
                 return space;
             }
         }
-
+        console.log("fuck 14");
         return null;
     }
 

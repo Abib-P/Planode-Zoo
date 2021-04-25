@@ -162,6 +162,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         props.Client.hasMany(props.ClientPass, {
             as: "clientPassByClient"
         }); // Client 0:N ClientPass
+
         props.ClientPass.belongsTo(
             props.Client,
             {
@@ -172,6 +173,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Pass.hasMany(props.ClientPass, {
             foreignKey: {
+                name: "pass_id",
                 allowNull: true
             }
         }); // Pass 0:N ClientPass
@@ -179,13 +181,20 @@ export class SequelizeManager implements SequelizeManagerProps {
             foreignKey: "pass_id"
         }); // ClientPass 1 Pass
 
-        props.ClientPass.hasMany(props.Visit); // ClientPass 0:N Visite
+        props.ClientPass.hasMany(props.Visit,{
+            foreignKey: {
+                name: "client_pass_id",
+                allowNull: true
+            }
+        }); // ClientPass 0:N Visite
+
         props.Visit.belongsTo(props.ClientPass, {
             foreignKey: "client_pass_id"
         }); //Visite 1 ClientPass
 
         props.Space.hasMany(props.Visit, {
             foreignKey: {
+                name: "space_id",
                 allowNull: true
             }
         }); // Space 0:N Visite
@@ -195,6 +204,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.EscapeGame.hasMany(props.Path, {
             foreignKey: {
+                name: "escape_game_id",
                 allowNull: true
             }
         }); // EscapeGame 0:N Path
@@ -204,6 +214,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Space.hasMany(props.Path, {
             foreignKey: {
+                name: "space_id",
                 allowNull: true
             }
         }); // Space 0:N Path
@@ -215,6 +226,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Client.hasMany(props.Session, {
             foreignKey: {
+                name: "client_id",
                 allowNull: true
             }
         }); // Client N Session
@@ -224,6 +236,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Employee.hasMany(props.Session, {
             foreignKey: {
+                name: "client_id",
                 allowNull: true
             }
         }); // Employee N Session
@@ -233,6 +246,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Job.hasMany(props.Employee, {
             foreignKey: {
+                name: "job_id",
                 allowNull: true
             }
         });// Job N Employee
@@ -242,6 +256,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Employee.hasMany(props.Absence, {
             foreignKey: {
+                name:  "employee_id",
                 allowNull: true
             }
         });// Employee N Absence
@@ -251,15 +266,21 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.SpaceType.hasMany(props.Space, {
             foreignKey: {
+                name: "space_type_id",
                 allowNull: true
             }
         });// SpaceType N Space
+
         props.Space.belongsTo(props.SpaceType, {
-            foreignKey: "space_type_id"
+            foreignKey: {
+                name:   "space_type_id",
+                allowNull: true
+            }
         }); // Space 1 SpaceType
 
         props.Species.hasMany(props.Animal, {
             foreignKey: {
+                name: "species_id",
                 allowNull: true
             }
         });// Species N Animal
@@ -269,6 +290,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Space.hasMany(props.Animal, {
             foreignKey: {
+                name: "space_id",
                 allowNull: true
             }
         });// Space N Animal
@@ -278,6 +300,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Space.hasMany(props.Maintenance, {
             foreignKey: {
+                name: "space_id",
                 allowNull: true
             }
         });// Space N Maintenance
@@ -287,6 +310,7 @@ export class SequelizeManager implements SequelizeManagerProps {
 
         props.Animal.hasMany(props.Treatment, {
             foreignKey: {
+                name: "animal_id",
                 allowNull: true
             }
         });// Animal N Treatment
@@ -294,13 +318,20 @@ export class SequelizeManager implements SequelizeManagerProps {
             foreignKey: "animal_id"
         }); // Treatment 1 Animal
 
-        props.MediaType.hasMany(props.Media);// MediaType N Media
+        props.MediaType.hasMany(props.Media, {
+            foreignKey: {
+                name: "media_type_id",
+                allowNull: true
+            }
+        });// MediaType N Media
+
         props.Media.belongsTo(props.MediaType, {
             foreignKey: "media_type_id"
         }); // Media 1 MediaType
 
         props.EscapeGame.hasMany(props.Pass, {
             foreignKey: {
+                name: "escape_game_id",
                 allowNull: true
             }
         });// EscapeGame N Pass

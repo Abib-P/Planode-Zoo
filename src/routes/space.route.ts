@@ -64,6 +64,7 @@ spaceRouter.post("/", async function(req, res){
     }
 
     const spaceController  = await SpaceController.getInstance();
+
     const space = await spaceController.create(
         {
             name,
@@ -79,6 +80,7 @@ spaceRouter.post("/", async function(req, res){
             endTime: endDate
         }, Number.parseInt(space_type_id)
     );
+
     if (space !== null){
         res.status(200);
         res.json(space);

@@ -15,3 +15,7 @@ export function parseDate(dateString: string) {
     //return isNaN(timestamp) ? null : new Date(timestamp);
 
 }
+
+export function verifyDate(start: Date, end: Date){
+    return start <= end;
+}
