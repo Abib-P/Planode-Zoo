@@ -33,7 +33,7 @@ export class AbsenceController {
             return null;
         } else {
             let absence = await this.Absence.create(props);
-            employee.setAbsence(absence);
+            absence.setEmployee(employee);
             return absence;
         }
     }

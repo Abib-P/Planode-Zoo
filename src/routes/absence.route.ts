@@ -34,7 +34,7 @@ absenceRouter.post("/", async function (req, res){
 
 absenceRouter.get("/", async function(req, res){
     const absenceController = await AbsenceController.getInstance();
-    const absences = absenceController.getAll();
+    const absences = await absenceController.getAll();
 
     if (absences != null){
         res.status(200);
@@ -47,7 +47,7 @@ absenceRouter.get("/", async function(req, res){
 absenceRouter.get("/:id", async function(req, res){
     const {id} = req.params;
     const absenceController = await AbsenceController.getInstance();
-    const absence = absenceController.getOne(Number.parseInt(id));
+    const absence = await absenceController.getOne(Number.parseInt(id));
 
     if (absence === null){
         res.status(404).end();
