@@ -1,8 +1,10 @@
 import {
     Sequelize,
     Model,
-    ModelCtor, DataTypes, Optional,
+    ModelCtor, DataTypes, Optional, BelongsToSetAssociationMixin, BelongsToGetAssociationMixin,
 } from "sequelize";
+import {SpaceInstance} from "./space.model";
+import {MediaInstance} from "./media.model";
 
 export interface SpaceMediaProps {
     id: number;
@@ -13,6 +15,11 @@ export interface SpaceMediaProps {
 export interface SpaceMediaCreationProps extends Optional<SpaceMediaProps, "id">{}
 
 export interface SpaceMediaInstance extends Model<SpaceMediaProps, SpaceMediaCreationProps>, SpaceMediaProps{
+    setSpace: BelongsToSetAssociationMixin<SpaceInstance, "id">;
+    getSpace: BelongsToGetAssociationMixin<SpaceInstance>;
+
+    setMedia: BelongsToSetAssociationMixin<MediaInstance, "id">;
+    getMedia: BelongsToGetAssociationMixin<MediaInstance>;
 
 }
 
