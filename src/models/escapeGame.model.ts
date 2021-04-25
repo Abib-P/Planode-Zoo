@@ -13,6 +13,13 @@ export interface EscapeGameProps {
     end: Date;
 }
 
+export interface EscapeGameUpdateProps {
+    id: number;
+    name?: string;
+    start?: Date;
+    end?: Date;
+}
+
 export interface EscapeGameCreationProps extends Optional<EscapeGameProps, "id"> {}
 
 export interface EscapeGameInstance extends Model<EscapeGameProps, EscapeGameCreationProps>, EscapeGameProps {
