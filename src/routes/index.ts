@@ -10,6 +10,8 @@ import {passRouter} from './pass.route';
 import {escapeGameRouter} from './escapeGame.route';
 import {absenceRouter} from './absence.route';
 import {clientPassRouter} from './clientPass.route';
+import {treatmentRouter} from './treatment.route';
+import {maintenanceRouter} from './maintenance.route';
 
 export function buildRoutes(app: Express){
     app.use("/job", jobRouter);
@@ -23,4 +25,6 @@ export function buildRoutes(app: Express){
     app.use("/escapeGame", escapeGameRouter);
     app.use("/absence", absenceRouter);
     app.use("/clientPass", clientPassRouter);
+    app.use("/treatment", treatmentRouter);
+    app.use("/maintenance", maintenanceRouter);
 }
