@@ -1,7 +1,5 @@
 import express from "express";
 import {TreatmentController} from "../controllers/treatment.controller";
-import {mediaRouter} from "./media.roote";
-import {MediaController} from "../controllers/media.controller";
 
 const treatmentRouter = express.Router();
 
@@ -30,7 +28,7 @@ treatmentRouter.post("/", async function (req, res) {
     }
 })
 
-mediaRouter.get("/", async function (req, res) {
+treatmentRouter.get("/", async function (req, res) {
     const treatmentController = await TreatmentController.getInstance();
     const treatment = await treatmentController.getAll()
 
@@ -42,7 +40,7 @@ mediaRouter.get("/", async function (req, res) {
     }
 });
 
-mediaRouter.get("/:id", async function (req, res) {
+treatmentRouter.get("/:id", async function (req, res) {
     const {id} = req.params;
     const treatmentController = await TreatmentController.getInstance();
     const treatment = await treatmentController.getOne(Number.parseInt(id));
@@ -55,7 +53,7 @@ mediaRouter.get("/:id", async function (req, res) {
     }
 });
 
-mediaRouter.put("/", async function (req, res){
+treatmentRouter.put("/", async function (req, res){
     const {id, description, end, start, frequency, nextOccurrence, animal_id} = req.body;
 
     if (id === undefined || description === undefined  || end === undefined  || start === undefined  || frequency === undefined || nextOccurrence === undefined || animal_id === undefined){
@@ -81,7 +79,7 @@ mediaRouter.put("/", async function (req, res){
     }
 });
 
-mediaRouter.delete("/:id", async function (req, res){
+treatmentRouter.delete("/:id", async function (req, res){
     const {id} = req.params;
     const treatmentController = await TreatmentController.getInstance();
     const affectedRows = await treatmentController.delete(Number.parseInt(id));
