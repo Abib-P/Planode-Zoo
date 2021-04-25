@@ -14,6 +14,9 @@ export async function authEmployeeMiddleware(req: express.Request,
         if ( session !== null ){
             next();
             return;
+        } else {
+            res.status(403).end();
+            return;
         }
     } else {
         res.status(401).end();
