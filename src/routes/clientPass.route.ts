@@ -1,5 +1,7 @@
 import express from "express";
 import {ClientPassController} from "../controllers/clientPass.controller";
+import {parseDate} from "../utils/date.utils";
+import {buildRoutes} from "./index";
 
 const clientPassRouter = express.Router();
 
@@ -16,12 +18,31 @@ clientPassRouter.post("/", async function(req, res){
         return;
     }
 
+    const start = parseDate(startDate);
+    if(start == null){
+        res.status(400).end();
+        return;
+    }
+
+    const end = parseDate(endDate);
+    if(end == null){
+        res.status(400).end();
+        return;
+    }
+
+    const buy = parseDate(buyingDate);
+    if(buy == null){
+        res.status(400).end();
+        return;
+    }
+
+
     const clientPassController = await ClientPassController.getInstance();
     const clientPass = await clientPassController.create(
         {
-            buyingDate: new Date(buyingDate),
-            startDate: new Date(startDate),
-            endDate: new Date(endDate),
+            buyingDate: buy,
+            startDate: start,
+            endDate: end,
             currentPos
         }, clientId, passId
     );
@@ -35,8 +56,16 @@ clientPassRouter.post("/", async function(req, res){
 });
 
 clientPassRouter.get("/", async function(req, res){
+    const {buyingDate} = req.body;
     const clientPassController = await ClientPassController.getInstance();
-    const clientPass = await clientPassController.getAll();
+    let clientPass;
+
+    const date = parseDate(buyingDate);
+    if( date === null){
+        clientPass = await clientPassController.getAll(undefined);
+    }else{
+        clientPass = await clientPassController.getAll(date);
+    }
 
     if (clientPass != null){
         res.status(200);
@@ -73,16 +102,41 @@ clientPassRouter.get("/client/:clientId", async function (req, res){
     }
 });
 
+clientPassRouter.get("/pass/:passId", async function (req, res){
+    const {passId} = req.params;
+    const clientPassController = await ClientPassController.getInstance();
+    const clientPass = await clientPassController.getAllToPass(Number.parseInt(passId));
+
+    if (clientPass != null){
+        res.status(200);
+        res.json(clientPass);
+    } else {
+        res.status(204).end();
+    }
+});
+
 clientPassRouter.put("/", async function(req, res){
     const {id, buyingDate, startDate, endDate, currentPos, clientId, passId} = req.body;
 
-    if (id === undefined ||
-        buyingDate === undefined ||
-        startDate === undefined ||
-        endDate === undefined ||
-        clientId === undefined ||
-        passId === undefined
-    ){
+    if (id === undefined ){
+        res.status(400).end();
+        return;
+    }
+
+    const start = parseDate(startDate);
+    if (start == null) {
+        res.status(400).end();
+        return;
+    }
+
+    const end = parseDate(endDate);
+    if (end == null) {
+        res.status(400).end();
+        return;
+    }
+
+    const buy = parseDate(buyingDate);
+    if (buy == null) {
         res.status(400).end();
         return;
     }
@@ -91,9 +145,9 @@ clientPassRouter.put("/", async function(req, res){
     const clientPass = await clientPassController.update(
         {
             id,
-            buyingDate: new Date(buyingDate),
-            startDate: new Date(startDate),
-            endDate: new Date(endDate),
+            buyingDate: buy,
+            startDate: start,
+            endDate: end,
             currentPos
         }, clientId, passId
     );
