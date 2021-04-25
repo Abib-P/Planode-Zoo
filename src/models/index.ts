@@ -43,7 +43,7 @@ export interface SequelizeManagerProps {
     Pass:  ModelCtor<PassInstance>;
     AnimalMedia: ModelCtor<AnimalMediaInstance>;
     SpaceMedia: ModelCtor<SpaceMediaInstance>;
-    CLientPass: ModelCtor<ClientPassInstance>;
+    ClientPass: ModelCtor<ClientPassInstance>;
     Visite: ModelCtor<VisiteInstance>;
     Path: ModelCtor<PathInstance>;
 }
@@ -71,7 +71,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Pass:  ModelCtor<PassInstance>;
     AnimalMedia: ModelCtor<AnimalMediaInstance>;
     SpaceMedia: ModelCtor<SpaceMediaInstance>;
-    CLientPass: ModelCtor<ClientPassInstance>;
+    ClientPass: ModelCtor<ClientPassInstance>;
     Visite: ModelCtor<VisiteInstance>;
     Path: ModelCtor<PathInstance>;
 
@@ -112,7 +112,7 @@ export class SequelizeManager implements SequelizeManagerProps {
             Pass: passCreator(sequelize),
             AnimalMedia: animalMediaCreator(sequelize),
             SpaceMedia: spaceMediaCreator(sequelize),
-            CLientPass: clientPassCreator(sequelize),
+            ClientPass: clientPassCreator(sequelize),
             Visite: visiteCreator(sequelize),
             Path: pathCreator(sequelize)
         }
@@ -126,76 +126,94 @@ export class SequelizeManager implements SequelizeManagerProps {
     private static associate(props: SequelizeManagerProps): void {
 
         // animal media
-        props.Media.hasMany( props.AnimalMedia );
-        props.AnimalMedia.belongsTo(
-            props.Media, {
-                foreignKey: "mediaId"
-            }
-        );
-        props.Animal.hasMany( props.AnimalMedia );
-        props.AnimalMedia.belongsTo(
-            props.Animal, {
-                foreignKey: "animalId"
-            }
-        );
+        props.Media.belongsToMany(props.Animal, {
+            through: {
+                model: props.AnimalMedia,
+                unique: false
+            },
+            foreignKey: "media_id"
+        });
+        props.Animal.belongsToMany(props.Media, {
+            through: {
+                model: props.AnimalMedia,
+                unique: false
+            },
+            foreignKey: "animal_id"
+        });
         // animal media fin
 
         // space media
-        props.Media.hasMany( props.SpaceMedia );
-        props.SpaceMedia.belongsTo(
-            props.Media, {
-                foreignKey: "mediaId"
-            }
-        );
-        props.Space.hasMany( props.SpaceMedia );
-        props.SpaceMedia.belongsTo(
-            props.Space, {
-                foreignKey: "spaceId"
-            }
-        );
+        props.Media.belongsToMany(props.Space, {
+            through: {
+                model: props.SpaceMedia,
+                unique: false
+            },
+            foreignKey: "media_id"
+        });
+        props.Space.belongsToMany(props.Media, {
+            through: {
+                model: props.SpaceMedia,
+                unique: false
+            },
+            foreignKey: "space_id"
+        });
         // space media fin
 
-        props.Client.hasMany(props.CLientPass, {
-            foreignKey: {
-                allowNull: true
-            }
+        props.Client.hasMany(props.ClientPass, {
+            as: "clientPassByClient"
         }); // Client 0:N ClientPass
-        props.CLientPass.belongsTo(props.Client); // ClientPass 1 Client
+        props.ClientPass.belongsTo(
+            props.Client,
+            {
+                foreignKey: "client_id",
+                as: "client"
+            }
+        ); // ClientPass 1 Client
 
-        props.Pass.hasMany(props.CLientPass, {
+        props.Pass.hasMany(props.ClientPass, {
             foreignKey: {
                 allowNull: true
             }
         }); // Pass 0:N ClientPass
-        props.CLientPass.belongsTo(props.Pass); // ClientPass 1 Pass
+        props.ClientPass.belongsTo(props.Pass, {
+            foreignKey: "pass_id"
+        }); // ClientPass 1 Pass
 
-        props.CLientPass.hasMany(props.Visite, {
+        props.ClientPass.hasMany(props.Visite, {
             foreignKey: {
                 allowNull: true
             }
         }); // ClientPass 0:N Visite
-        props.Visite.belongsTo(props.CLientPass); //Visite 1 ClientPass
+        props.Visite.belongsTo(props.ClientPass, {
+            foreignKey: "client_pass_id"
+        }); //Visite 1 ClientPass
 
         props.Space.hasMany(props.Visite, {
             foreignKey: {
                 allowNull: true
             }
         }); // Space 0:N Visite
-        props.Visite.belongsTo(props.Space); //Visite 1 Space
+        props.Visite.belongsTo(props.Space, {
+            foreignKey: "space_id"
+        }); //Visite 1 Space
 
         props.EscapeGame.hasMany(props.Path, {
             foreignKey: {
                 allowNull: true
             }
         }); // EscapeGame 0:N Path
-        props.Path.belongsTo(props.EscapeGame); // Path 1 EscapeGame
+        props.Path.belongsTo(props.EscapeGame, {
+            foreignKey: "escape_game_id"
+        }); // Path 1 EscapeGame
 
         props.Space.hasMany(props.Path, {
             foreignKey: {
                 allowNull: true
             }
         }); // Space 0:N Path
-        props.Path.belongsTo(props.Space); // Path 1 Space
+        props.Path.belongsTo(props.Space, {
+            foreignKey: "space_id"
+        }); // Path 1 Space
 
         // ################################################################################
 
@@ -204,77 +222,99 @@ export class SequelizeManager implements SequelizeManagerProps {
                 allowNull: true
             }
         }); // Client N Session
-        props.Session.belongsTo(props.Client); // Session 1 Client
+        props.Session.belongsTo(props.Client, {
+            foreignKey: "client_id"
+        }); // Session 1 Client
 
         props.Client.hasMany(props.Session, {
             foreignKey: {
                 allowNull: true
             }
         }); // Employee N Session
-        props.Session.belongsTo(props.Client); // Session 1 Employee
+        props.Session.belongsTo(props.Client, {
+            foreignKey: "client_id"
+        }); // Session 1 Employee
 
         props.Job.hasMany(props.Employee, {
             foreignKey: {
                 allowNull: true
             }
         });// Job N Employee
-        props.Employee.belongsTo(props.Job); // Employee 1 Job
+        props.Employee.belongsTo(props.Job, {
+            foreignKey: "job_id"
+        }); // Employee 1 Job
 
         props.Employee.hasMany(props.Absence, {
             foreignKey: {
                 allowNull: true
             }
         });// Employee N Absence
-        props.Absence.belongsTo(props.Employee); // Absence 1 Employee
+        props.Absence.belongsTo(props.Employee, {
+            foreignKey: "employee_id"
+        }); // Absence 1 Employee
 
         props.SpaceType.hasMany(props.Space, {
             foreignKey: {
                 allowNull: true
             }
         });// SpaceType N Space
-        props.Space.belongsTo(props.SpaceType); // Space 1 SpaceType
+        props.Space.belongsTo(props.SpaceType, {
+            foreignKey: "space_type_id"
+        }); // Space 1 SpaceType
 
         props.Species.hasMany(props.Animal, {
             foreignKey: {
                 allowNull: true
             }
         });// Species N Animal
-        props.Animal.belongsTo(props.Species); // Animal 1 Species
+        props.Animal.belongsTo(props.Species, {
+            foreignKey: "species_id"
+        }); // Animal 1 Species
 
         props.Space.hasMany(props.Animal, {
             foreignKey: {
                 allowNull: true
             }
         });// Space N Animal
-        props.Animal.belongsTo(props.Space); // Animal 1 Space
+        props.Animal.belongsTo(props.Space, {
+            foreignKey: "space_id"
+        }); // Animal 1 Space
 
         props.Space.hasMany(props.Maintenance, {
             foreignKey: {
                 allowNull: true
             }
         });// Space N Maintenance
-        props.Maintenance.belongsTo(props.Space); // Maintenance 1 Space
+        props.Maintenance.belongsTo(props.Space, {
+            foreignKey: "space_id"
+        }); // Maintenance 1 Space
 
         props.Animal.hasMany(props.Treatment, {
             foreignKey: {
                 allowNull: true
             }
         });// Animal N Treatment
-        props.Treatment.belongsTo(props.Animal); // Treatment 1 Animal
+        props.Treatment.belongsTo(props.Animal, {
+            foreignKey: "animal_id"
+        }); // Treatment 1 Animal
 
         props.MediaType.hasMany(props.Media, {
             foreignKey: {
                 allowNull: true
             }
         });// MediaType N Media
-        props.Media.belongsTo(props.MediaType); // Media 1 MediaType
+        props.Media.belongsTo(props.MediaType, {
+            foreignKey: "media_type_id"
+        }); // Media 1 MediaType
 
         props.EscapeGame.hasMany(props.Pass, {
             foreignKey: {
                 allowNull: true
             }
         });// EscapeGame N Pass
-        props.Pass.belongsTo(props.EscapeGame); // Pass 1 EscapeGame TODO -> Pass 1 or 0 EscapeGame
+        props.Pass.belongsTo(props.EscapeGame, {
+            foreignKey: "escape_game_id"
+        }); // Pass 1 EscapeGame TODO -> Pass 1 or 0 EscapeGame
 
     }
 
@@ -298,7 +338,7 @@ export class SequelizeManager implements SequelizeManagerProps {
         this.Pass = props.Pass;
         this.AnimalMedia = props.AnimalMedia;
         this.SpaceMedia = props.SpaceMedia;
-        this.CLientPass = props.CLientPass;
+        this.ClientPass = props.ClientPass;
         this.Visite = props.Visite;
         this.Path = props.Path;
     }

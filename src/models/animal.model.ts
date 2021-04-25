@@ -13,6 +13,8 @@ export interface AnimalProps {
     name: string;
     description: string;
     isInSpace: boolean;
+    species_id?: number;
+    space_id?: number;
 }
 
 export interface AnimalCreationProps extends Optional<AnimalProps, "id"> {}
@@ -37,6 +39,12 @@ export default function(sequelize: Sequelize): ModelCtor<AnimalInstance> {
         },
         isInSpace: {
             type: DataTypes.BOOLEAN
+        },
+        species_id: {
+            type: DataTypes.BIGINT
+        },
+        space_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,

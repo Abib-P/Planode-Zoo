@@ -12,6 +12,8 @@ import {EmployeeInstance} from "./employee.model";
 export interface SessionProps {
     id: number;
     token: string;
+    client_id?: number;
+    employee_id?: number;
 }
 
 export interface SessionCreationProps extends Optional<SessionProps, "id"> {}
@@ -35,6 +37,12 @@ export default function(sequelize: Sequelize): ModelCtor<SessionInstance> {
         token: {
             type: DataTypes.STRING,
             unique: true
+        },
+        client_id: {
+            type: DataTypes.BIGINT
+        },
+        employee_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,

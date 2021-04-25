@@ -5,6 +5,11 @@ import {spaceTypeRouter} from "./spaceType.roote";
 import {mediaTypeRouter} from "./mediaType.roote";
 import {mediaRouter} from "./media.roote";
 import {authEmployeeRouter} from "./authEmployee.router";
+import {clientRouter} from './client.route';
+import {passRouter} from './pass.route';
+import {escapeGameRouter} from './escapeGame.route';
+import {absenceRouter} from './absence.route';
+import {clientPassRouter} from './clientPass.route';
 
 export function buildRoutes(app: Express){
     app.use("/job", jobRouter);
@@ -13,4 +18,9 @@ export function buildRoutes(app: Express){
     app.use("/mediaType", mediaTypeRouter);
     app.use("/media", mediaRouter);
     app.use("/employee", authEmployeeRouter);
+    app.use("/clientAdmin", clientRouter);
+    app.use("/pass", passRouter)
+    app.use("/escapeGame", escapeGameRouter);
+    app.use("/absence", absenceRouter);
+    app.use("/clientPass", clientPassRouter);
 }

@@ -18,6 +18,7 @@ export interface SpaceProps {
     closingDayTime: Date;
     openingNightTime: Date;
     closingNightTime: Date;
+    space_type_id?: number;
 }
 
 export interface SpaceCreationProps extends Optional<SpaceProps, "id"> {}
@@ -59,6 +60,9 @@ export default function(sequelize: Sequelize): ModelCtor<SpaceInstance> {
         },
         closingNightTime: {
             type: DataTypes.DATE
+        },
+        space_type_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,

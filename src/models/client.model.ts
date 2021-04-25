@@ -3,8 +3,9 @@ import {
     Optional,
     Model,
     DataTypes,
-    ModelCtor
+    ModelCtor, HasManyGetAssociationsMixin
 } from "sequelize";
+import {ClientPassInstance} from "./clientPass.model";
 
 export interface ClientProps {
     id: number;
@@ -15,7 +16,9 @@ export interface ClientProps {
 
 export interface ClientCreationProps extends Optional<ClientProps, "id"> {}
 
-export interface ClientInstance extends Model<ClientProps, ClientCreationProps>, ClientProps{}
+export interface ClientInstance extends Model<ClientProps, ClientCreationProps>, ClientProps{
+    getClientPass: HasManyGetAssociationsMixin<ClientPassInstance[]>;
+}
 
 export default function(sequelize: Sequelize): ModelCtor<ClientInstance> {
     return sequelize.define<ClientInstance>("Client", {

@@ -9,6 +9,8 @@ import {
 export interface PathProps {
     id: number;
     order: number;
+    escape_game_id?: number;
+    space_id?: number;
 }
 
 export interface PathCreationProps extends Optional<PathProps, "id"> {}
@@ -27,6 +29,12 @@ export default function(sequelize: Sequelize): ModelCtor<PathInstance> {
         order: {
             type: DataTypes.BIGINT,
             allowNull: false
+        },
+        escape_game_id: {
+            type: DataTypes.BIGINT
+        },
+        space_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,
