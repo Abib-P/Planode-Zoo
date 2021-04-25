@@ -11,7 +11,7 @@ export class ClientPassController{
 
     private static instance: ClientPassController;
 
-    public static async getinstance(): Promise<ClientPassController>{
+    public static async getInstance(): Promise<ClientPassController>{
         if (ClientPassController.instance === undefined) {
             const {ClientPass, Client, Pass} = await SequelizeManager.getInstance();
             ClientPassController.instance = new ClientPassController(ClientPass, Client, Pass);
