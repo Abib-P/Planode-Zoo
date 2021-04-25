@@ -47,8 +47,8 @@ export class AnimalMediaController {
 
         const AnimalMedia = await this.AnimalMedia.create();
         if (AnimalMedia != null){
-            await AnimalMedia.setAnimal(Animal);
-            await AnimalMedia.setMedia(media);
+            AnimalMedia.setAnimal(Animal);
+            AnimalMedia.setMedia(media);
             return AnimalMedia;
         } else {
             return null;

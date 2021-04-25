@@ -31,6 +31,7 @@ export default function(sequelize: Sequelize): ModelCtor<SpaceTypeInstance> {
         }
     }, {
         freezeTableName: true,
+        underscored: true,
         paranoid: true,
         timestamps: true
     });

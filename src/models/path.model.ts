@@ -44,6 +44,7 @@ export default function(sequelize: Sequelize): ModelCtor<PathInstance> {
         }
     }, {
         freezeTableName: true,
+        underscored: true,
         paranoid: true,
         timestamps: true
     });

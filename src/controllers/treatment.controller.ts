@@ -33,7 +33,7 @@ export class TreatmentController{
             return null;
         } else {
             const treatment = await this.Treatment.create( props );
-            await treatment.set(animal);
+            treatment.set(animal);
             return treatment;
         }
     }

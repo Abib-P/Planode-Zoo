@@ -39,11 +39,7 @@ export class SpeciesController {
     public async update(props: SpeciesProps): Promise<SpeciesInstance | null> {
         const treatment = await SpeciesController.instance.getOne(props.id);
         if (treatment != null){
-            return treatment.update(
-                {
-                    props
-                }
-            );
+            return treatment.update( props );
         }
         return null;
     }

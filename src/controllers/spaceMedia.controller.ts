@@ -47,8 +47,8 @@ export class SpaceMediaController {
 
         const spaceMedia = await this.SpaceMedia.create();
         if (spaceMedia != null){
-            await spaceMedia.setSpace(space);
-            await spaceMedia.setMedia(media);
+            spaceMedia.setSpace(space);
+            spaceMedia.setMedia(media);
             return spaceMedia;
         } else {
             return null;

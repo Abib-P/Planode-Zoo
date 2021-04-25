@@ -35,7 +35,7 @@ export class SpaceController {
         } else {
             const space = await this.Space.create( props );
             if (space != null){
-                await space.setSpaceType(spaceType);
+                space.setSpaceType(spaceType);
                 return space;
             }
         }
