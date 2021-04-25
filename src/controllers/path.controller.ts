@@ -1,5 +1,5 @@
 import {ModelCtor} from "sequelize";
-import {PathInstance} from "../models/path.model";
+import {PathInstance, PathProps} from "../models/path.model";
 import {EscapeGameInstance} from "../models/escapeGame.model";
 import {SpaceInstance} from "../models/space.model";
 import {SequelizeManager} from "../models";
@@ -57,10 +57,14 @@ export class PathController{
                 order: path.order
             });
 
-            await pathInstance.setSpace(space);
-            await pathInstance.setEscapeGame(escape_game)
+            pathInstance.setSpace(space);
+            pathInstance.setEscapeGame(escape_game);
+
+            result.push(pathInstance);
 
         }
+
+        console.log(result);
 
         return await PathController.instance.getAllFromOneEscapeGame(escape_game_id);
     }
@@ -75,6 +79,38 @@ export class PathController{
 
     public async getAll(): Promise<PathInstance[] | null>{
         return this.Path.findAll();
+    }
+
+    public async update(props: PathProps): Promise<PathInstance | null>{
+        const path  = await this.Path.findOne({
+            where: {
+                id: props.id
+            }
+        });
+
+        if (path != null){
+            return path.update(props);
+        } else {
+            return null;
+        }
+    }
+
+    public async delete(id: number): Promise<number>{
+        const path = await this.Path.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (path != null){
+            return this.Path.destroy({
+                where: {
+                    id: path.id
+                }
+            })
+        }
+
+        return 0;
     }
 
 

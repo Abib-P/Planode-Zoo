@@ -179,11 +179,7 @@ export class SequelizeManager implements SequelizeManagerProps {
             foreignKey: "pass_id"
         }); // ClientPass 1 Pass
 
-        props.ClientPass.hasMany(props.Visit, {
-            foreignKey: {
-                allowNull: true
-            }
-        }); // ClientPass 0:N Visite
+        props.ClientPass.hasMany(props.Visit); // ClientPass 0:N Visite
         props.Visit.belongsTo(props.ClientPass, {
             foreignKey: "client_pass_id"
         }); //Visite 1 ClientPass
@@ -298,11 +294,7 @@ export class SequelizeManager implements SequelizeManagerProps {
             foreignKey: "animal_id"
         }); // Treatment 1 Animal
 
-        props.MediaType.hasMany(props.Media, {
-            foreignKey: {
-                allowNull: true
-            }
-        });// MediaType N Media
+        props.MediaType.hasMany(props.Media);// MediaType N Media
         props.Media.belongsTo(props.MediaType, {
             foreignKey: "media_type_id"
         }); // Media 1 MediaType

@@ -29,6 +29,7 @@ export default function(sequelize: Sequelize): ModelCtor<JobInstance> {
         }
     }, {
         freezeTableName: true,
+        underscored: true,
         paranoid: true,
         timestamps: true
     });

@@ -75,7 +75,7 @@ export class MaintenanceController {
         if (maintenance != null){
             await maintenance.update(props);
             if (isSpaceUpdate && space!= null){
-                await maintenance.setSpace(space);
+                maintenance.setSpace(space);
             }
             return maintenance;
         }

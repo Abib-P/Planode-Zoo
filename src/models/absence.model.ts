@@ -43,6 +43,7 @@ export default function(sequelize: Sequelize): ModelCtor<AbsenceInstance> {
 
     }, {
         freezeTableName: true,
+        underscored: true,
         paranoid: true,
         timestamps: true
     });

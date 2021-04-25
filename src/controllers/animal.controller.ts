@@ -48,8 +48,8 @@ export class AnimalController {
             return null;
         } else {
             let animal = await this.Animal.create(props);
-            await animal.setSpace(space);
-            await animal.setSpecies(species);
+            animal.setSpace(space);
+            animal.setSpecies(species);
             return animal;
         }
     }

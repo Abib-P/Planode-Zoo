@@ -49,8 +49,8 @@ export class ClientPassController{
         if (clientPass === null){
             return null;
         } else {
-            await clientPass.setClient(client);
-            await clientPass.setPass(pass);
+            clientPass.setClient(client);
+            clientPass.setPass(pass);
             return clientPass;
         }
     }
