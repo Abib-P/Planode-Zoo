@@ -45,10 +45,11 @@ export class AnimalMediaController {
             return null;
         }
 
-        const AnimalMedia = await this.AnimalMedia.create();
+        const AnimalMedia = await this.AnimalMedia.create({
+            media_id: media.id,
+            animal_id: Animal.id
+        });
         if (AnimalMedia != null){
-            AnimalMedia.setAnimal(Animal);
-            AnimalMedia.setMedia(media);
             return AnimalMedia;
         } else {
             return null;
