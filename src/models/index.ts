@@ -222,13 +222,13 @@ export class SequelizeManager implements SequelizeManagerProps {
             foreignKey: "client_id"
         }); // Session 1 Client
 
-        props.Client.hasMany(props.Session, {
+        props.Employee.hasMany(props.Session, {
             foreignKey: {
                 allowNull: true
             }
         }); // Employee N Session
-        props.Session.belongsTo(props.Client, {
-            foreignKey: "client_id"
+        props.Session.belongsTo(props.Employee, {
+            foreignKey: "employee_id"
         }); // Session 1 Employee
 
         props.Job.hasMany(props.Employee, {
