@@ -11,13 +11,14 @@ export interface JobProps {
     name: string;
 }
 
-export interface JobCreationProps extends Optional<JobProps, "id"> {}
+export interface JobCreationProps extends Optional<JobProps, "id"> {
+}
 
 export interface JobInstance extends Model<JobProps, JobCreationProps>, JobProps {
 
 }
 
-export default function(sequelize: Sequelize): ModelCtor<JobInstance> {
+export default function (sequelize: Sequelize): ModelCtor<JobInstance> {
     return sequelize.define<JobInstance>("Job", {
         id: {
             type: DataTypes.BIGINT,

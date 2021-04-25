@@ -16,7 +16,8 @@ export interface SessionProps {
     employee_id?: number;
 }
 
-export interface SessionCreationProps extends Optional<SessionProps, "id"> {}
+export interface SessionCreationProps extends Optional<SessionProps, "id"> {
+}
 
 export interface SessionInstance extends Model<SessionProps, SessionCreationProps>, SessionProps {
     setClient: BelongsToSetAssociationMixin<ClientInstance, "id">;
@@ -27,7 +28,7 @@ export interface SessionInstance extends Model<SessionProps, SessionCreationProp
     getEmployee: BelongsToGetAssociationMixin<EmployeeInstance>;
 }
 
-export default function(sequelize: Sequelize): ModelCtor<SessionInstance> {
+export default function (sequelize: Sequelize): ModelCtor<SessionInstance> {
     return sequelize.define<SessionInstance>("Session", {
         id: {
             type: DataTypes.BIGINT,

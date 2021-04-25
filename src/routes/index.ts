@@ -21,7 +21,7 @@ import {animalRouter} from "./animal.route";
 import {pathRouter} from "./path.route"
 
 
-export function buildRoutes(app: Express){
+export function buildRoutes(app: Express) {
     app.use("/job", jobRouter);
     app.use("/client", authClientRouter);
     app.use("/spaceType", spaceTypeRouter);

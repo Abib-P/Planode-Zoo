@@ -12,7 +12,7 @@ export class AuthClientController {
     private static instance: AuthClientController;
 
     public static async getInstance(): Promise<AuthClientController> {
-        if (AuthClientController.instance === undefined){
+        if (AuthClientController.instance === undefined) {
             const {Client, Session} = await SequelizeManager.getInstance();
             AuthClientController.instance = new AuthClientController(Client, Session);
         }
@@ -43,10 +43,10 @@ export class AuthClientController {
             return null;
         }
         const isSamePassword = await compare(password, client.password);
-        if(!isSamePassword) {
+        if (!isSamePassword) {
             return null;
         }
-        const token = await hash( Date.now() + login, 5);
+        const token = await hash(Date.now() + login, 5);
         const session = await this.Session.create({
             token
         });

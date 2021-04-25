@@ -3,7 +3,7 @@ import {JobController} from "../controllers/job.controller";
 
 const jobRouter = express.Router();
 
-jobRouter.post("/", async function(req, res) {
+jobRouter.post("/", async function (req, res) {
     const {name} = req.body;
     if (name === undefined) {
         res.status(400).end();
@@ -21,7 +21,7 @@ jobRouter.post("/", async function(req, res) {
     }
 });
 
-jobRouter.get("/", async function(req, res){
+jobRouter.get("/", async function (req, res) {
     const jobController = await JobController.getInstance();
     const jobs = await jobController.getAll();
 
@@ -40,7 +40,7 @@ jobRouter.get("/:id", async function (req, res) {
         Number.parseInt(id)
     );
 
-    if (job === null){
+    if (job === null) {
         res.status(404).end();
     } else {
         res.status(200);
@@ -48,11 +48,11 @@ jobRouter.get("/:id", async function (req, res) {
     }
 });
 
-jobRouter.put("/", async function (req, res){
+jobRouter.put("/", async function (req, res) {
     const {id} = req.body;
     const {name} = req.body;
 
-    if (id === undefined || name === undefined){
+    if (id === undefined || name === undefined) {
         res.status(400).end();
         return;
     }
@@ -71,12 +71,12 @@ jobRouter.put("/", async function (req, res){
     }
 });
 
-jobRouter.delete("/:id", async function (req, res){
+jobRouter.delete("/:id", async function (req, res) {
     const {id} = req.params;
     const jobController = await JobController.getInstance();
     const affectedRows = await jobController.delete(Number.parseInt(id));
 
-    if (affectedRows > 0){
+    if (affectedRows > 0) {
         res.status(200).end();
     } else {
         res.status(400).end();

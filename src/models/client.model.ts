@@ -3,9 +3,8 @@ import {
     Optional,
     Model,
     DataTypes,
-    ModelCtor, HasManyGetAssociationsMixin
+    ModelCtor
 } from "sequelize";
-import {ClientPassInstance} from "./clientPass.model";
 
 export interface ClientProps {
     id: number;
@@ -14,13 +13,13 @@ export interface ClientProps {
     password: string;
 }
 
-export interface ClientCreationProps extends Optional<ClientProps, "id"> {}
-
-export interface ClientInstance extends Model<ClientProps, ClientCreationProps>, ClientProps{
-    getClientPass: HasManyGetAssociationsMixin<ClientPassInstance[]>;
+export interface ClientCreationProps extends Optional<ClientProps, "id"> {
 }
 
-export default function(sequelize: Sequelize): ModelCtor<ClientInstance> {
+export interface ClientInstance extends Model<ClientProps, ClientCreationProps>, ClientProps {
+}
+
+export default function (sequelize: Sequelize): ModelCtor<ClientInstance> {
     return sequelize.define<ClientInstance>("Client", {
         id: {
             type: DataTypes.BIGINT,

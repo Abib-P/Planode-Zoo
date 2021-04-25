@@ -39,7 +39,7 @@ export class JobController {
 
     public async update(props: JobProps): Promise<JobInstance | null> {
         const job = await JobController.instance.getOne(props.id);
-        if (job != null){
+        if (job != null) {
             return job.update(
                 props
             );
@@ -49,7 +49,7 @@ export class JobController {
 
     public async delete(id: number): Promise<number> {
         const job = await JobController.instance.getOne(id);
-        if (job != null){
+        if (job != null) {
             return this.Job.destroy(
                 {
                     where: {

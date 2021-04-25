@@ -76,7 +76,7 @@ export class SequelizeManager implements SequelizeManagerProps {
     Path: ModelCtor<PathInstance>;
 
     public static async getInstance(): Promise<SequelizeManager> {
-        if(SequelizeManager.instance === undefined) {
+        if (SequelizeManager.instance === undefined) {
             SequelizeManager.instance = await SequelizeManager.initialize();
         }
         return SequelizeManager.instance;
