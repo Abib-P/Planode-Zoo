@@ -12,6 +12,7 @@ export interface MaintenanceProps {
     description: string;
     end: Date;
     start: Date;
+    space_id?: number;
 }
 
 export interface MaintenanceCreationProps extends Optional<MaintenanceProps, "id"> {}
@@ -36,6 +37,9 @@ export default function(sequelize: Sequelize): ModelCtor<MaintenanceInstance> {
         },
         start: {
             type: DataTypes.DATE
+        },
+        space_id: {
+            type: DataTypes.BIGINT
         }
     }, {
         freezeTableName: true,

@@ -36,7 +36,7 @@ export class MediaController {
             return null;
         }else{
             let media = await this.Media.create(props);
-            media.setMediaType(mediaType);
+            await media.setMediaType(mediaType);
             return media;
         }
     }

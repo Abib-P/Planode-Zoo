@@ -12,6 +12,7 @@ export interface AbsenceProps {
     start: Date;
     end: Date;
     isValidated: boolean;
+    employee_id?: number;
 }
 
 export interface AbsenceCreationProps extends Optional<AbsenceProps, "id"> {}
@@ -35,6 +36,9 @@ export default function(sequelize: Sequelize): ModelCtor<AbsenceInstance> {
         },
         isValidated: {
             type: DataTypes.BOOLEAN
+        },
+        employee_id: {
+            type: DataTypes.BIGINT
         }
 
     }, {
