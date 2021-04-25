@@ -38,7 +38,6 @@ export default function(sequelize: Sequelize): ModelCtor<MediaInstance> {
         }
     }, {
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         timestamps: true
     });

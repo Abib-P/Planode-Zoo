@@ -31,7 +31,6 @@ export default function(sequelize: Sequelize): ModelCtor<SpeciesInstance> {
         }
     }, {
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         timestamps: true
     });

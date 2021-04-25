@@ -42,7 +42,6 @@ export default function (sequelize: Sequelize): ModelCtor<VisitInstance> {
         }
     }, {
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         timestamps: false
     })

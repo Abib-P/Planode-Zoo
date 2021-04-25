@@ -5,6 +5,8 @@ import {
     DataTypes,
     Sequelize, BelongsToSetAssociationMixin, BelongsToGetAssociationMixin,
 } from "sequelize";
+import {EscapeGameInstance} from "./escapeGame.model";
+import {SpaceInstance} from "./space.model";
 
 export interface PathProps {
     id: number;
@@ -16,7 +18,11 @@ export interface PathProps {
 export interface PathCreationProps extends Optional<PathProps, "id"> {}
 
 export interface PathInstance extends Model<PathProps, PathCreationProps>, PathProps{
+    setEscapeGame: BelongsToSetAssociationMixin<EscapeGameInstance, "id">;
+    getEscapeGame: BelongsToGetAssociationMixin<EscapeGameInstance>;
 
+    setSpace: BelongsToSetAssociationMixin<SpaceInstance, "id">;
+    getSpace: BelongsToGetAssociationMixin<SpaceInstance>;
 }
 
 export default function(sequelize: Sequelize): ModelCtor<PathInstance> {
@@ -38,7 +44,6 @@ export default function(sequelize: Sequelize): ModelCtor<PathInstance> {
         }
     }, {
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         timestamps: true
     });

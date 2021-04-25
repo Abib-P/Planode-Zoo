@@ -39,7 +39,6 @@ export default function(sequelize: Sequelize): ModelCtor<ClientInstance> {
         },
     }, {
         freezeTableName: true,
-        underscored: true,
         paranoid: true,
         timestamps: true
     });
