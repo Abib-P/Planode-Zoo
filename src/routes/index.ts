@@ -3,7 +3,7 @@ import {jobRouter} from "./job.route";
 import {authClientRouter} from "./authClient.router";
 import {spaceTypeRouter} from "./spaceType.roote";
 import {mediaTypeRouter} from "./mediaType.roote";
-import {mediaRouter} from "./media.roote";
+import {mediaRouter} from "./media.route";
 import {authEmployeeRouter} from "./authEmployee.router";
 import {clientRouter} from './client.route';
 import {passRouter} from './pass.route';
@@ -16,6 +16,9 @@ import {speciesRouter} from './species.route';
 import {spaceRouter} from './space.route';
 import {animalMediaRouter} from './animalMedia.route';
 import {spaceMediaRouter} from './spaceMedia.route';
+import {visitRouter} from "./visit.route";
+import {animalRouter} from "./animal.route";
+import {spaceRouter} from "./space.route";
 
 export function buildRoutes(app: Express){
     app.use("/job", jobRouter);
@@ -35,4 +38,8 @@ export function buildRoutes(app: Express){
     app.use("/space", spaceRouter);
     app.use("/spaceMedia", spaceMediaRouter);
     app.use("/animalMedia", animalMediaRouter);
+    app.use("/visit", visitRouter);
+    app.use("/animal", animalRouter);
+    app.use("/space", spaceRouter);
+
 }

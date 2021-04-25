@@ -6,27 +6,32 @@ import {
     Sequelize, BelongsToSetAssociationMixin, BelongsToGetAssociationMixin,
 } from "sequelize";
 
-export interface VisiteProps{
+import {ClientPassInstance} from "./clientPass.model";
+import {SpaceInstance} from "./space.model";
+
+export interface VisitProps {
     id: number;
-    visiteDate: Date;
+    visitDate: Date;
     client_pass_id?: number;
     space_id?: number;
 }
 
-export interface VisiteCreationProps extends Optional<VisiteProps, "id"> {}
+export interface VisitCreationProps extends Optional<VisitProps, "id"> {}
 
-export interface VisiteInstance extends Model<VisiteProps, VisiteCreationProps>, VisiteProps {
+export interface VisitInstance extends Model<VisitProps, VisitCreationProps>, VisitProps {
+    setClientPass: BelongsToSetAssociationMixin<ClientPassInstance, "id">;
+    setSpace: BelongsToSetAssociationMixin<SpaceInstance, "id">;
 
 }
 
-export default function (sequelize: Sequelize): ModelCtor<VisiteInstance> {
-    return sequelize.define<VisiteInstance>("Visite", {
+export default function (sequelize: Sequelize): ModelCtor<VisitInstance> {
+    return sequelize.define<VisitInstance>("Visit", {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
         },
-        visiteDate: {
+        visitDate: {
             type: DataTypes.DATE
         },
         client_pass_id: {
